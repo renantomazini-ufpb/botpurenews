@@ -17,11 +17,10 @@ def getNews():
     if not rss_list:
         return []
 
-    urls = random.sample(rss_list, k=min(3, len(rss_list))) #ao invés do choice, usarei o sample, evitar duplicatas
+    urls = random.sample(rss_list, k=min(5, len(rss_list))) #ao invés do choice, usarei o sample, evitar duplicatas
 
     for url in urls:
         feed = feedparser.parse(url)
-
         if feed.bozo:
             #print("Erro:", feed.bozo_exception) #haha, bozo
             continue
@@ -30,9 +29,11 @@ def getNews():
             if hasattr(entry, "title"):
                 titlesNews.append(entry.title)
 
+
     random.shuffle(titlesNews)  
 
     return titlesNews[:30]
+
 
 
 

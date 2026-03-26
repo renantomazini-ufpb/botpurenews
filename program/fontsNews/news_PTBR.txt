@@ -1,7 +1,6 @@
 https://g1.globo.com/dynamo/rss2.xml
 https://g1.globo.com/dynamo/concursos-e-emprego/rss2.xml
 https://g1.globo.com/dynamo/economia/rss2.xml
-https://g1.globo.com/dynamo/loterias/rss2.xml
 https://g1.globo.com/dynamo/mundo/rss2.xml
 https://g1.globo.com/dynamo/planeta-bizarro/rss2.xml
 https://g1.globo.com/dynamo/tecnologia/rss2.xml
@@ -12,3 +11,6 @@ https://feeds.folha.uol.com.br/esporte/rss091.xml
 https://feeds.folha.uol.com.br/poder/rss091.xml
 https://feeds.folha.uol.com.br/mundo/rss091.xml
 https://feeds.folha.uol.com.br/tec/rss091.xml
+https://www.camara.leg.br/noticias/rss
+http://www.adrenaline.com.br/rss.html
+https://diolinux.com.br/feed
