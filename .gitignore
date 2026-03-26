@@ -1,0 +1,18 @@
+# Ignorar bot temporário
+program/bot/botbsky.py
+
+# Ambiente virtual
+venv/
+venvWin/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code
+.vscode/
+
+# Sistema
+.DS_Store
+Thumbs.db

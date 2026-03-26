@@ -1,0 +1,152 @@
+# ======================
+# VIOLÊNCIA / MORTE
+# ======================
+morte
+morrer
+morreu
+morto
+matar
+matou
+matando
+assassinato
+assassino
+homicidio
+execucao
+massacre
+ataque
+ataques
+violencia
+violento
+agressao
+agredir
+espancamento
+tiro
+tiroteio
+arma
+armado
+explosao
+explosão
+explodiu
+
+# ======================
+# CRIME
+# ======================
+crime
+criminoso
+ilegal
+prisao
+prisão
+preso
+presas
+presos
+detido
+detencao
+cadeia
+policia
+investigacao
+investigar
+acusado
+suspeito
+roubo
+roubar
+assalto
+assaltante
+furto
+sequestro
+sequestrado
+trafico
+contrabando
+
+
+# ======================
+# ABUSO / VIOLÊNCIA SEXUAL
+# ======================
+abuso
+abusar
+violacao
+violação
+violado
+estupro
+estuprador
+assedio
+assediar
+exploracao
+exploração
+exploração sexual
+exploracao sexual
+coercao
+coerção
+pornográfico
+femininas
+masculinas
+aliciamento
+menores
+sexualizadas
+
+# ======================
+# GUERRA / CONFLITO
+# ======================
+guerra
+conflito
+combate
+batalha
+bombardeio
+bomba
+militar
+exercito
+forcas armadas
+ataque militar
+invasao
+invadir
+ocupacao
+terrorismo
+terrorista
+Israel
+Irã
+Palestina
+Libano
+Líbano
+míssil
+nuclear
+
+# ======================
+# RACISMO / DISCRIMINAÇÃO
+# ======================
+racismo
+racista
+preconceito
+discriminacao
+discriminar
+odio
+odio racial
+intolerancia
+xenofobia
+homofobia
+segregacao
+ofensa
+injuria
+
+# ======================
+# DROGAS
+# ======================
+droga
+drogas
+entorpecente
+cocaina
+maconha
+heroina
+trafico de drogas
+traficante
+overdose
+
+# ======================
+# POLÍTICA SENSÍVEL
+# ======================
+corrupcao
+corrupto
+escandalo
+fraude
+investigacao
+propina
+desvio
+lavagem de dinheiro
