@@ -159,7 +159,7 @@ def makeNewNewsChars(news_list, chars):
 
     for n in news_list:
         char = random.choice(chars)
-        connector = random.choice(["com", "acompanhado de", "diz", "segundo", "argumenta"])
+        connector = random.choice(["com", "acompanhado de", "diz", "segundo", "argumenta", "afirma", "diz especialista"])
         new_news.append(f"{n} {connector} {char}")
 
     return new_news
@@ -239,6 +239,48 @@ def makePlotTwistNews(news_list):
 
     return new_news
 
+    def makeDadaLikeNews(news_list):
+        if len(news_list) < 2:
+            return []
+
+        # cria lista de palavras possíveis (filtrando lixo)
+        word_pool = []
+
+        for n in news_list:
+            for w in n.lower().split():
+                w = w.strip(".,:;!?()[]\"'")
+                if len(w) > 3:  # evita palavras muito curtas tipo "de", "a"
+                    word_pool.append(w)
+
+        if not word_pool:
+            return []
+
+        for _ in range(10):  # tenta algumas vezes achar combinação boa
+            common_word = random.choice(word_pool)
+
+            # acha headlines que tenham essa palavra
+            matches = [
+                n for n in news_list
+                if common_word in n.lower().split()
+            ]
+
+            if len(matches) < 2:
+                continue
+
+            n1, n2 = random.sample(matches, 2)
+
+            try:
+                part1 = n1.lower().split(common_word)[0].strip()
+                part2 = n2.lower().split(common_word)[-1].strip()
+
+                new_title = f"{part1} {common_word} {part2}".strip()
+                return [applyNewsStyle(new_title)]
+
+            except Exception:
+                continue
+
+        return []
+
 
 # ============== Execução ==========
 
@@ -264,11 +306,12 @@ def getOneNews():
         return random.choice(desculpas)
 
     generators = [
+        lambda: makeDadaLikeNews(clean_news), 
         lambda: makeNewNewsShuffle(clean_news),
         lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
-        lambda: makeCrazyNews(clean_news, wordLists["chars"]),
-        lambda: makeUltraCrazyNews(clean_news, wordLists),
-        lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
+        #lambda: makeCrazyNews(clean_news, wordLists["chars"]),
+        #lambda: makeUltraCrazyNews(clean_news, wordLists),
+        #lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
         lambda: makePlotTwistNews(clean_news),
         lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
     ]

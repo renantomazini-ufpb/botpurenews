@@ -8,6 +8,17 @@ Joe Biden
 Vladimir Putin
 Elon Musk
 Mark Zuckerberg
+King Crimson
+Jensen Huang
+Michel Temer
+Michele Bonora
+Carla Zembelha
+Lobão
+Haddad
+Véio da Havan
+Careca do INSS
+Xi Ji Ping
+Celso Russomano
 
 # ======================
 # FILMES / SÉRIES
@@ -54,3 +65,5 @@ um ET brasileiro
 um coach motivacional
 a banda Rammstein
 teu pai
+Vasco
+NxZero
