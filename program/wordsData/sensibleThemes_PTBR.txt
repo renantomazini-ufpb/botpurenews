@@ -169,6 +169,7 @@ arremessados
 policiais
 hospitalizados
 atentado
+vítimas
 
 # ======================
 # ABUSO / VIOLÊNCIA SEXUAL

@@ -4,6 +4,8 @@ import random
 import re
 import unicodedata
 
+#smells bad? Mas confia
+
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
@@ -112,9 +114,9 @@ def applyNewsStyle(title):
         "{} 🔥🔥🔥🔥🔥",
         "{} 🔴",
         "{} 😨",
-        "{} ¯\\_(ツ)_/¯",
         "{} :P",
         "{} :O",
+         "{} ¯\\_(ツ)_/¯",
     ]
 
     pattern = random.choice(patterns)
@@ -132,22 +134,18 @@ def safeApply(func, title):
 
 def finalizeTitle(title):  # isso é trabalho duplicado?
     title = re.sub(r'\s+', ' ', title)
-    title = title.strip().capitalize()
-    title = applyNewsStyle(title)
+    #title = title.strip().capitalize()
+    #title = applyNewsStyle(title)
     return title
+
+def isValidPart(text):
+    return text and len(text.split()) >= 2
+
 
 
 def makeNewNewsShuffle(news_list):
-    # mistura noticias, usar recursões regulares para cortar elas bem no meio do titulo,
-    # e depois conectar melhor com conectivos
-
     if len(news_list) < 2:
         return []
-
-    '''connectors = [
-        "e", "enquanto", "mas", "após", "depois que",
-        "ao mesmo tempo", "enquanto isso", "porém", "além disso"
-    ]''' #testar sem conctores
 
     new_news = []
 
@@ -157,10 +155,10 @@ def makeNewNewsShuffle(news_list):
         p1, _ = smartCut(n1)
         _, p2 = smartCut(n2)
 
-        #connector = random.choice(connectors)
+        # 🔥 validação
+        if not isValidPart(p1) or not isValidPart(p2):
+            continue
 
-        # evita duplicação estranha de espaços
-        #new_title = f"{p1} {connector} {p2}".strip()
         new_title = f"{p1} {p2}".strip()
         new_title = applyNewsStyle(new_title)
 
@@ -198,18 +196,21 @@ def makeNewNewsAdjctives(news_list, adjectives):
 def makeNewNewsChars(news_list, chars):
     new_news = []
 
-    # pega as noticias e corta o final para botar "com" ou "acompanhado" de um do char
     for n in news_list:
-        base, _ = smartCut(n)  # corta antes de adicionar
+        base, _ = smartCut(n)
+
+        # 🔥 valida base
+        if not isValidPart(base):
+            continue
 
         char = random.choice(chars)
         connector = ', ' + random.choice([
             "com", "acompanhado de", "diz", "segundo",
             "argumenta", "afirma", "diz especialista",
-            "complementa", "escreve", "bluota", "posta"
+            "complementa", "escreve", "posta"
         ])
 
-        new_news.append(f"{base} {connector} {char}")
+        new_news.append(f"{base}{connector} {char}")
 
     return new_news
 
@@ -332,6 +333,9 @@ def combineStyles(news_list, generators, wordLists):
 
     title = random.choice(generated)
 
+    if not isValidPart(title): #tentar nao validar vazios
+        return []
+
     extra_generators = [
         
         lambda t: makePlotTwistNews([t])[0],
@@ -343,13 +347,25 @@ def combineStyles(news_list, generators, wordLists):
     for _ in range(random.randint(1, 3)):
         try:
             func = random.choice(extra_generators)
-            title = func(title)
+            new_title = func(title)
+
+            if isValidPart(new_title):
+                title = new_title
         except:
             pass
 
-    title = replaceConnectorsWithComma(title)
+    #title = replaceConnectorsWithComma(title)
+    title = re.sub(r'\s+', ' ', title)  # remove espaços duplicados
+    title = re.sub(r'\s+,', ',', title)  # remove espaço antes de vírgula
+    title = re.sub(r',\s*,', ',', title)  # remove vírgula dupla
+    title = re.sub(r'\b(em|de|para|com)\s*,', ',', title)
+    title = title.strip()
 
     return [title]
+
+def endsBadly(text):
+    text = re.sub(r'[^\w\s]$', '', text.strip())
+    return re.search(r'\b(em|de|para|com)$', text.strip())
 
 def replaceConnectorsWithComma(title):
     # conectivos que viram vírgula
@@ -413,8 +429,35 @@ def getOneNews():
 
     if not wordLists["chars"] or not wordLists["places"]:
         return random.choice(desculpas)
+    generators = [
+        (lambda: combineStyles(
+            clean_news,
+            [
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ), 1),
+        (lambda: combineStyles(
+            clean_news,
+            [
+                lambda: makeDadaLikeNews(clean_news),
+                lambda: makeNewNewsShuffle(clean_news)
+            ],
+            wordLists
+        ), 3),
 
-    generators = [ #chei de gabiarra
+        (lambda: makeNewNewsShuffle(clean_news), 5),
+        (lambda: makeNewNewsChars(clean_news, wordLists["chars"]), 1),
+        #(lambda: makeFirstPartNews(clean_news), 3),
+        (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 2),
+    ]
+
+    funcs = [g for g, _ in generators]
+    weights = [w for _, w in generators]
+
+    generated_list = random.choices(funcs, weights=weights, k=1)[0]()
+    '''generators = [ #chei de gabiarra
         lambda: combineStyles(
             clean_news,
             [
@@ -450,7 +493,7 @@ def getOneNews():
         lambda: makeNewNewsShuffle(clean_news), #gambiarra, eu sei
         lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
         lambda: makeFirstPartNews(clean_news),
-        # lambda: makePlotTwistNews(clean_news), # não tô gostando dos resultados
+        #lambda: makePlotTwistNews(clean_news), # não tô gostando dos resultados
         lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
         lambda: combineStyles(
             clean_news,
@@ -461,11 +504,21 @@ def getOneNews():
             wordLists
         ),
         #lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
-    ]
+    ]'''
 
-    generated_list = random.choice(generators)()
+    valid_titles = [t for t in generated_list if isValidPart(t)]
 
-    if not generated_list:
-        return random.choice(desculpas)
+    if not valid_titles:
+        return random.choice(clean_news)
+    for _ in range(3):
+        titulo = random.choice(valid_titles)
+        if not endsBadly(titulo):
+            break
+    else:
+        return applyNewsStyle(random.choice(clean_news))
 
-    return random.choice(generated_list)
+    titulo = finalizeTitle(titulo)
+    pontuacao = ['','','','.','?','!','!!!','',' #post',' ','',''] #gambiarra passou para cá
+    titulo = titulo.strip() + random.choice(pontuacao)
+
+    return titulo
