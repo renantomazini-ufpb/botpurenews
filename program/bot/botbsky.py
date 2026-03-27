@@ -26,6 +26,8 @@ def post():
 
 
 if __name__ == "__main__":
-    while True:
-        post()
-        time.sleep(3600)
+    post()
+    #conflito com actions!
+    #while True:
+    #    post()
+    #    time.sleep(3600)
