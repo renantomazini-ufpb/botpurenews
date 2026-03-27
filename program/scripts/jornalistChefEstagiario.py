@@ -112,6 +112,10 @@ def applyNewsStyle(title):
         "{} #dadaismo",
         "{} 🔥🔥🔥🔥🔥",
         "{} 🔴",
+        "{} 😨",
+        "{} :P",
+        "{} :O",
+         "{} ¯\\_(ツ)_/¯",
     ]
 
     pattern = random.choice(patterns)
@@ -202,7 +206,8 @@ def makeNewNewsChars(news_list, chars):
         char = random.choice(chars)
         connector = ', ' + random.choice([
             "com", "acompanhado de", "diz", "segundo",
-            "argumenta", "afirma", "diz especialista"
+            "argumenta", "afirma", "diz especialista",
+            "complementa", "escreve", "bluota", "posta"
         ])
 
         new_news.append(f"{base} {connector} {char}")
@@ -243,6 +248,11 @@ def makePlotTwistNews(news_list):
             "e surpreende",
             "e termina de forma inesperada",
             "e causa confusão",
+            "e mercado reage",
+            "e mercado reage",
+            "e mercado reage",
+            "e mercado reage",
+            "mas a que custo?",
         ])
 
         new_news.append(f"{n}, {twist}")
@@ -395,7 +405,8 @@ def getOneNews():
         ":) Tenha um bom dia!",
         "Hackeram meu windows",
         "parem as máquinas!",
-        "Jornalismo ou esquema de pirâmede? Descubra"
+        "Jornalismo ou esquema de pirâmede? Descubra",
+        "Pix sumiu, servidor caiu"
     ]
 
     if not clean_news:

@@ -167,6 +167,7 @@ contrabando
 capota
 arremessados
 policiais
+hospitalizados
 
 
 # ======================
