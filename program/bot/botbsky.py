@@ -25,8 +25,16 @@ def post():
         print("Erro ao postar:", e)
 
 
+# ... (seus imports e definições de função permanecem iguais)
+
+
 if __name__ == "__main__":
-    post()
+    try:
+        post()
+        print("Execução finalizada com sucesso.")
+    except Exception as error:
+        print(f"Falha na execução agendada: {error}")
+        exit(1) # Avisa o GitHub que algo deu errado
     #conflito com actions!
     #while True:
     #    post()
