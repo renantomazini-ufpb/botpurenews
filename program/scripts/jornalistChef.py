@@ -133,10 +133,10 @@ def makeNewNewsShuffle(news_list):
     if len(news_list) < 2:
         return []
 
-    connectors = [
+    '''connectors = [
         "e", "enquanto", "mas", "após", "depois que",
         "ao mesmo tempo", "enquanto isso", "porém", "além disso"
-    ]
+    ]''' #testar sem conctores
 
     new_news = []
 
@@ -146,10 +146,11 @@ def makeNewNewsShuffle(news_list):
         p1, _ = smartCut(n1)
         _, p2 = smartCut(n2)
 
-        connector = random.choice(connectors)
+        #connector = random.choice(connectors)
 
         # evita duplicação estranha de espaços
-        new_title = f"{p1} {connector} {p2}".strip()
+        #new_title = f"{p1} {connector} {p2}".strip()
+        new_title = f"{p1} {p2}".strip()
         new_title = applyNewsStyle(new_title)
 
         new_news.append(new_title)
