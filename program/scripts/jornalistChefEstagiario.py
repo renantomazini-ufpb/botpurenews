@@ -302,7 +302,7 @@ def makeFirstPartNews(news_list):
     if not news_list:
         return []
 
-    connectors_pattern = r'\b(que|quando|após|depois que|enquanto|mas|porém|e|com|para)\b'
+    connectors_pattern = r'\b(que|quando|após|depois que|enquanto|mas|porém|e|com|para|,)\b'
 
     new_news = []
 
@@ -352,8 +352,9 @@ def combineStyles(news_list, generators, wordLists):
                 title = new_title
         except:
             pass
-
-    #title = replaceConnectorsWithComma(title)
+        
+    if random.random() < 0.5:
+        title = replaceConnectorsWithComma(title)
     title = re.sub(r'\s+', ' ', title)  # remove espaços duplicados
     title = re.sub(r'\s+,', ',', title)  # remove espaço antes de vírgula
     title = re.sub(r',\s*,', ',', title)  # remove vírgula dupla

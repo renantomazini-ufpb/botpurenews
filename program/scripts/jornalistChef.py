@@ -6,6 +6,7 @@ import unicodedata
 
 #smells bad? Mas confia
 
+
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
@@ -303,7 +304,7 @@ def makeFirstPartNews(news_list):
     if not news_list:
         return []
 
-    connectors_pattern = r'\b(que|quando|após|depois que|enquanto|mas|porém|e|com|para)\b'
+    connectors_pattern = r'\b(que|quando|após|depois que|enquanto|mas|porém|e|com|para|,)\b'
 
     new_news = []
 
@@ -353,8 +354,9 @@ def combineStyles(news_list, generators, wordLists):
                 title = new_title
         except:
             pass
-
-    #title = replaceConnectorsWithComma(title)
+        
+    if random.random() < 0.5:
+        title = replaceConnectorsWithComma(title)
     title = re.sub(r'\s+', ' ', title)  # remove espaços duplicados
     title = re.sub(r'\s+,', ',', title)  # remove espaço antes de vírgula
     title = re.sub(r',\s*,', ',', title)  # remove vírgula dupla
