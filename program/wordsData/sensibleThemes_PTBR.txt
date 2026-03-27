@@ -2,6 +2,8 @@
 # VIOLÊNCIA / MORTE
 # ======================
 morte
+morre
+atropelado
 morrer
 morreu
 morto

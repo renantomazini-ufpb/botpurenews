@@ -362,13 +362,13 @@ def getOneNews():
         return random.choice(desculpas)
 
     generators = [
-        #lambda: makeDadaLikeNews(clean_news),
+        lambda: makeDadaLikeNews(clean_news),
         #lambda: makeNewNewsShuffle(clean_news),
         #lambda: makeNewNewsShuffle(clean_news),
         #lambda: makeNewNewsShuffle(clean_news),
         #lambda: makeNewNewsShuffle(clean_news),
         #lambda: makeNewNewsShuffle(clean_news), #gambiarra, eu sei
-        lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
+        #lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
         #lambda: makeFirstPartNews(clean_news),
         # lambda: makePlotTwistNews(clean_news), # não tô gostando dos resultados
         #lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
