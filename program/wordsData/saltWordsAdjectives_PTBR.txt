@@ -95,3 +95,7 @@ zangado
 direto
 marginalizado
 zeloso
+bonito
+feio
+doido
+valioso

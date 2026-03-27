@@ -20,6 +20,18 @@ Careca do INSS
 Xi Ji Ping
 Celso Russomano
 Luis Halmiton
+Alan Turing
+Romoeu Zema
+Fi do Lula
+Richard Stallman
+Kléber Medonça Filho
+Kentin Tarantino
+Felipe Neto
+novo técnico do Flamengo, senhor Waldemar
+Carlo Ancelotti
+Dorival Jr
+Careca da Havam
+Karl Marx
 
 # ======================
 # FILMES / SÉRIES
@@ -34,7 +46,8 @@ Yoda
 Luke Skywalker
 Homem de Ferro
 Papai Noel
-Monkey D. Luffy
+Coelho da Páscoa
+Luffy
 Naruto Uzumaki
 
 # ======================
@@ -58,6 +71,7 @@ Pabllo Vittar
 # ALEATÓRIO / CAÓTICO
 # ======================
 um gato gigante
+um alienígena
 um alienígena suspeito
 um robô descontrolado
 um cachorro influencer
@@ -70,3 +84,5 @@ Vasco
 NxZero
 Monstro ancestral despertado
 CEO do Sexo
+ET Bilu
+Linus Torvalds

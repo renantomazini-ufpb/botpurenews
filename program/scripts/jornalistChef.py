@@ -7,8 +7,7 @@ import unicodedata
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
-
-
+# carregamentos :D
 # carregamentos :D
 def loadSensibleThemes(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -103,11 +102,19 @@ def applyNewsStyle(title):
         "{} surpreende especialistas",
         "{} chama atenção",
         "{} vira destaque",
+        "{}, veja as imagens",
+        "{}, se cadraste", 
+        "{} s̵u̵d̷o̵ ̸a̸p̵t̴-̶g̸e̷t̵ ̵v̸i̸d̸a̴",
+        "{} #getlife",
+        "{} #bot",
+        "{} #purenews",
+        "{} #dadaismo",
+        "{} 🔥🔥🔥🔥🔥",
+        "{} 🔴",
     ]
 
     pattern = random.choice(patterns)
     return pattern.format(title)
-
 
 def safeApply(func, title):
     try:
@@ -315,7 +322,8 @@ def combineStyles(news_list, generators, wordLists):
 
     title = random.choice(generated)
 
-    extra_generators = [ #:V colocar mais?
+    extra_generators = [
+        
         lambda t: makePlotTwistNews([t])[0],
         lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
         lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
@@ -329,7 +337,6 @@ def combineStyles(news_list, generators, wordLists):
         except:
             pass
 
-    #  Trocando por virgula :D
     title = replaceConnectorsWithComma(title)
 
     return [title]
@@ -368,7 +375,6 @@ def splitByCommaStyle(title):
 
     return title
 
-
 # Essa aqui vou botar para testar
 def getOneNews():
     sensibleThemes = loadSensibleThemes(caminho)
@@ -397,7 +403,34 @@ def getOneNews():
     if not wordLists["chars"] or not wordLists["places"]:
         return random.choice(desculpas)
 
-    generators = [
+    generators = [ #chei de gabiarra
+        lambda: combineStyles(
+            clean_news,
+            [
+                
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ),
+        lambda: combineStyles(
+            clean_news,
+            [
+                
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ),
+        lambda: combineStyles(
+            clean_news,
+            [
+                
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ),
         lambda: makeDadaLikeNews(clean_news),
         lambda: makeNewNewsShuffle(clean_news),
         lambda: makeNewNewsShuffle(clean_news),
@@ -416,7 +449,7 @@ def getOneNews():
             ],
             wordLists
         ),
-        lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
+        #lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
     ]
 
     generated_list = random.choice(generators)()

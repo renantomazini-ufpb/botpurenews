@@ -4,11 +4,11 @@ import random
 import re
 import unicodedata
 
+
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
-
-
+# carregamentos :D
 # carregamentos :D
 def loadSensibleThemes(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -103,11 +103,19 @@ def applyNewsStyle(title):
         "{} surpreende especialistas",
         "{} chama atenção",
         "{} vira destaque",
+        "{}, veja as imagens",
+        "{}, se cadraste", 
+        "{} s̵u̵d̷o̵ ̸a̸p̵t̴-̶g̸e̷t̵ ̵v̸i̸d̸a̴",
+        "{} #getlife",
+        "{} #bot",
+        "{} #purenews",
+        "{} #dadaismo",
+        "{} 🔥🔥🔥🔥🔥",
+        "{} 🔴",
     ]
 
     pattern = random.choice(patterns)
     return pattern.format(title)
-
 
 def safeApply(func, title):
     try:
@@ -330,8 +338,43 @@ def combineStyles(news_list, generators, wordLists):
         except:
             pass
 
+    title = replaceConnectorsWithComma(title)
+
     return [title]
 
+def replaceConnectorsWithComma(title):
+    # conectivos que viram vírgula
+    connectors = [
+        r'\be\b',
+        r'\bmas\b',
+        r'\bporém\b',
+        r'\bno entanto\b',
+        r'\bcontudo\b',
+        r'\balém disso\b',
+        r'\bdepois que\b',
+        r'\bquando\b',
+        r'\benquanto\b',
+    ]
+
+    for c in connectors:
+        title = re.sub(c, ',', title, flags=re.IGNORECASE)
+
+    # limpa vírgulas duplicadas e espaços
+    title = re.sub(r'\s*,\s*', ', ', title)
+    title = re.sub(r',+', ',', title)
+
+    return title.strip()
+
+def splitByCommaStyle(title):
+    parts = re.split(r'\s+e\s+|\s+mas\s+|\s+porém\s+|\s+e\s+', title)
+
+    # limpa espaços
+    parts = [p.strip() for p in parts if p.strip()]
+
+    if len(parts) > 1:
+        return ", ".join(parts)
+
+    return title
 
 # Essa aqui vou botar para testar
 def getOneNews():
@@ -361,17 +404,44 @@ def getOneNews():
     if not wordLists["chars"] or not wordLists["places"]:
         return random.choice(desculpas)
 
-    generators = [
+    generators = [ #chei de gabiarra
+        lambda: combineStyles(
+            clean_news,
+            [
+                
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ),
+        lambda: combineStyles(
+            clean_news,
+            [
+                
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ),
+        lambda: combineStyles(
+            clean_news,
+            [
+                
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
+            ],
+            wordLists
+        ),
         lambda: makeDadaLikeNews(clean_news),
-        #lambda: makeNewNewsShuffle(clean_news),
-        #lambda: makeNewNewsShuffle(clean_news),
-        #lambda: makeNewNewsShuffle(clean_news),
-        #lambda: makeNewNewsShuffle(clean_news),
-        #lambda: makeNewNewsShuffle(clean_news), #gambiarra, eu sei
-        #lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
-        #lambda: makeFirstPartNews(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news), #gambiarra, eu sei
+        lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
+        lambda: makeFirstPartNews(clean_news),
         # lambda: makePlotTwistNews(clean_news), # não tô gostando dos resultados
-        #lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
+        lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
         lambda: combineStyles(
             clean_news,
             [
