@@ -315,6 +315,7 @@ def combineStyles(news_list, generators, wordLists):
     title = random.choice(generated)
 
     extra_generators = [
+        
         lambda t: makePlotTwistNews([t])[0],
         lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
         lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
@@ -362,9 +363,13 @@ def getOneNews():
     generators = [
         lambda: makeDadaLikeNews(clean_news),
         lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news),
+        lambda: makeNewNewsShuffle(clean_news), #gambiarra, eu sei
         lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
         lambda: makeFirstPartNews(clean_news),
-        lambda: makePlotTwistNews(clean_news),
+        # lambda: makePlotTwistNews(clean_news), # não tô gostando dos resultados
         lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
         lambda: combineStyles(
             clean_news,
