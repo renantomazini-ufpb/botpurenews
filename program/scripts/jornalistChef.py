@@ -280,6 +280,27 @@ def makeDadaLikeNews(news_list):
             continue
 
         return []
+    
+#Essa aqui vou botar para testar
+def makeFirstPartNews(news_list):
+    if not news_list:
+        return []
+
+    connectors_pattern = r'\b(que|quando|após|depois que|enquanto|mas|porém|e|com|para)\b'
+
+    new_news = []
+
+    for n in news_list:
+        parts = re.split(connectors_pattern, n, flags=re.IGNORECASE)
+
+        if len(parts) > 1:
+            first_part = parts[0].strip()
+        else:
+            # fallback: corta por pontuação
+            parts = re.split(r'[,:-]', n)
+            first_part = parts[0].strip()
+
+        new_news.append(first_part)
 
 
 # ============== Execução ==========
@@ -309,11 +330,12 @@ def getOneNews():
         lambda: makeDadaLikeNews(clean_news), 
         lambda: makeNewNewsShuffle(clean_news),
         lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
-        #lambda: makeCrazyNews(clean_news, wordLists["chars"]),
-        #lambda: makeUltraCrazyNews(clean_news, wordLists),
-        lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
+        lambda: makeFirstPartNews(clean_news),
         lambda: makePlotTwistNews(clean_news),
         lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
+        #lambda: makeCrazyNews(clean_news, wordLists["chars"]),
+        #lambda: makeUltraCrazyNews(clean_news, wordLists),
+        #lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
     ]
 
     # escolhe um tipo aleatório
