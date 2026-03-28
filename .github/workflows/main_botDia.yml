@@ -1,0 +1,30 @@
+name: Bot Daily Previsao
+
+on:
+  schedule:
+    - cron: "43 9 */3 * *"  # 09:43 UTC = 06:43 Brasil
+  workflow_dispatch:  # permite rodar manualmente também
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: |
+          pip install atproto
+
+      - name: Rodar bot
+        env:
+          BSKY_USER: ${{ secrets.BSKY_USER }}
+          BSKY_PASS: ${{ secrets.BSKY_PASS }}
+        run: |
+          python -m program.bot.botbsky_previsao_doDIa
