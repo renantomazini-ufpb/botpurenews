@@ -311,11 +311,12 @@ def makeNewNewsChars(news_list, chars):
 
         char = random.choice(chars)
         connector = ', ' + random.choice([
-            "com", "acompanhado de", "diz", "segundo","diz","diz","diz","diz","diz","diz","diz",
-            "argumenta", "afirma", "diz especialista",
-            "complementa", "escreve", "posta","relata",
-            "conclui", "comenta", "tweeta", "debocha"
+            "com", "acompanhado de", "diz", "segundo","diz",
+            "argumenta", "afirma", "diz especialista", "diz especialista", "comenta",
+            "complementa", "escreve", "posta","relata", "segundo especialista", "grava",
+            "conclui", "comenta", "tweeta", "debocha", "segundo testemunnha"
         ])
+
 
         new_news.append(f"{base}{connector} {char}")
 
