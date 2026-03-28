@@ -5,8 +5,6 @@ import re
 import unicodedata
 
 
-
-
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
@@ -143,10 +141,14 @@ def applyNewsStyle(title):
     patterns = [
         "{}: entenda o caso",
         "{}; veja detalhes",
+        "{} e mercado reage",
+        "{} e viraliza",
         "{} e gera reação",
         "{} e repercute nas redes",
         "{} e levanta debate",
+        "{}, argumentam especialistas",
         "{} surpreende especialistas",
+        "{}; veja nas redes",
         "{} chama atenção",
         "{} vira destaque",
         "{}, veja as imagens",
@@ -159,9 +161,16 @@ def applyNewsStyle(title):
         "{} 🔥🔥🔥🔥🔥",
         "{} 🔴",
         "{} 😨",
+        "{}; :)",
+        "{} 🙄​",
+        "{} 😁​​",
+        "{} 🤪​",
+        "{} 🤪🤪🤪​",
         "{} :P",
         "{} :O",
          "{} ¯\\_(ツ)_/¯",
+         "{} !",
+         "{} !?",
     ]
 
     pattern = random.choice(patterns)
@@ -176,6 +185,39 @@ def safeApply(func, title):
         pass
     return title
 
+def applyContractions(text):
+    contractions = [
+        (r'\bem\s+a\b', 'na'),
+        (r'\bem\s+as\b', 'nas'),
+        (r'\bem\s+o\b', 'no'),
+        (r'\bem\s+os\b', 'nos'),
+
+        (r'\bde\s+a\b', 'da'),
+        (r'\bde\s+as\b', 'das'),
+        (r'\bde\s+o\b', 'do'),
+        (r'\bde\s+os\b', 'dos'),
+
+        (r'\bpara\s+a\b', 'pra'),
+        (r'\bpara\s+as\b', 'pras'),
+        (r'\bpara\s+o\b', 'pro'),
+        (r'\bpara\s+os\b', 'pros'),
+
+        (r'\ba\s+a\b', 'à'),
+        (r'\ba\s+as\b', 'às'),
+        (r'\ba\s+o\b', 'ao'),
+        (r'\ba\s+os\b', 'aos'),
+
+        (r'\bpor\s+a\b', 'pela'),
+        (r'\bpor\s+as\b', 'pelas'),
+        (r'\bpor\s+o\b', 'pelo'),
+        (r'\bpor\s+os\b', 'pelos'),
+    ]
+
+    for pattern, repl in contractions:
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
+
+    return text
+
 
 def finalizeTitle(title):
     # 1. Remove espaços duplicados
@@ -184,6 +226,8 @@ def finalizeTitle(title):
     # 2. Limpeza de colisões (ex: "do em" -> "em")
     # Agora só remove se forem preposições grudadas, sem tocar na pontuação
     prep_collision = r'\b(com|de|do|da|em|no|na|para|por|e)\s+(com|de|do|da|em|no|na|para|por|e)\b'
+    # 🔥 remove "à," "ao," "a," quebrados
+    title = re.sub(r'\b(a|à|ao|aos|às)\s*,\s*', '', title, flags=re.IGNORECASE)
     title = re.sub(prep_collision, r'\2', title, flags=re.IGNORECASE)
     
     # 3. Arruma o espaço das vírgulas (Garante "palavra, palavra")
@@ -192,7 +236,7 @@ def finalizeTitle(title):
     
     # 4. Remove preposição pendurada no FINAL (antes dos emojis/estilo)
     title = re.sub(r'\s+(com|de|do|da|em|no|na|para|e|o|a|os|as|que)$', '', title, flags=re.IGNORECASE)
-
+    title = applyContractions(title)
     # 5. Capitalização
     if len(title) > 0:
         title = title[0].upper() + title[1:]
@@ -495,7 +539,7 @@ def getOneNews():
                 lambda: makeNewNewsChars(clean_news, wordLists["chars"])
             ],
             wordLists
-        ), 4),
+        ), 2),
         (lambda: combineStyles(
             clean_news,
             [
@@ -504,11 +548,39 @@ def getOneNews():
             ],
             wordLists
         ), 1),
-
+        (lambda: combineStyles(
+            clean_news,
+            [
+                lambda: makeDadaLikeNews(clean_news),
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
+            ],
+            wordLists
+        ), 1),
+        (lambda: combineStyles(
+            clean_news,
+            [
+                lambda: makeDadaLikeNews(clean_news),
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
+                lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
+            ],
+            wordLists
+        ), 1),
+        (lambda: combineStyles(
+            clean_news,
+            [
+                lambda: makeDadaLikeNews(clean_news),
+                lambda: makeNewNewsShuffle(clean_news),
+                lambda: makeNewNewsPlace(clean_news, wordLists["places"])
+            ],
+            wordLists
+        ), 1),
         (lambda: makeNewNewsShuffle(clean_news), 6),
         (lambda: makeNewNewsChars(clean_news, wordLists["chars"]), 4),
-        #(lambda: makeFirstPartNews(clean_news), 3),
-        (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 2),
+        (lambda: makeFirstPartNews(clean_news), 1),
+        (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
         (lambda: makeDadaLikeNews(clean_news),3),
     ]
 
