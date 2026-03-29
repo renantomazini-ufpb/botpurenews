@@ -550,7 +550,7 @@ def splitByCommaStyle(title):
 #tinha isso em outra versão, vai ser foda
 def randomWordSwap(title, wordLists):
     # alterar chances
-    if random.random() > 0.18:
+    if random.random() > 0.25:
         return title
 
     words = title.split()
