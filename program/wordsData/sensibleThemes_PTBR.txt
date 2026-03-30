@@ -416,6 +416,7 @@ discriminação social
 discriminacao social
 preconceito racial
 preconceito social
+covas
 
 # ======================
 # DROGAS
