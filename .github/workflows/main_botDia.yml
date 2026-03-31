@@ -19,8 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar dependências
-        run: |
-          pip install atproto
+        run: pip install feedparser atproto
 
       - name: Rodar bot
         env:
