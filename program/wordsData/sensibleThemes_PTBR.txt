@@ -420,6 +420,7 @@ covas
 Síndrome
 tumor
 naufragam
+ecocídio
 
 # ======================
 # DROGAS
