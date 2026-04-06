@@ -1,6 +1,7 @@
 # ======================
 # POLÍTICA / FIGURAS REAIS
 # ======================
+Lênin
 Luiz Inácio Lula da Silva
 Jair Tripa Solta
 Luiz Inácio Lula da Silva
@@ -63,10 +64,27 @@ youtuber cancelado
 Papai Noel
 Coelho da Páscoa
 Luffy
-tiktoker confuso
-influencer arrependido
-adm do perfil
-bot descontrolado
+Bruce Wayne
+Ceo da Konami, Seto Kaiba
+Solid Snake
+Chutlu
+Sherlock Holmes
+Teletubi
+liberal babaca
+Fã de yaoi
+Stray Kids
+BTS
+Cebolinha
+Mônica
+Galo de tá dando Onda
+Furry gostoso
+Cain, irmão de Abel
+São Pedro
+São Paulo
+São Matheus
+Adv Phoenix Wright
+Promotor Miles Edgeworth
+Detetive
 
 # ======================
 # MEMES / INTERNET
@@ -74,8 +92,11 @@ bot descontrolado
 Lobo Pidão
 Neymar
 Casimiro
-Luva de Pedreiro
+Neto Felipe
+Sensacionalista
+Videoensaista
 Tio Paulo
+
 
 # ======================
 # BRASIL / MÍDIA
@@ -84,6 +105,12 @@ Silvio Santos
 Faustão
 Anitta
 Pabllo Vittar
+Vocalista do RPM
+Vocalista do Titãs
+Fantasma do Chico Science
+Ariano Suassuna
+Luís Fernando Verissimo
+
 
 # ======================
 # ALEATÓRIO / CAÓTICO
@@ -287,3 +314,62 @@ cantora Poppy
 Marcelo D2
 Klebson, formado em letras
 Dra Clara da Gema
+Chefe Potiguar
+Charrua Local
+Gaymer
+Xintóista
+Medium
+Traficante de batata
+Funcionario transformado em Barata
+Kafka
+Padeiro gourmet
+Gato de terno
+Cachorro de gravata
+Executivo
+Faria Limmer
+Farinha Limmer
+Médicuzinho
+Medicuzão
+Médico local
+Dr Auzio Variola
+Diretor do Souza Esporte Clube
+Torcida do Corinthians
+Construtora Obina
+Construtora MRV
+Mico Leão Dourado
+Anta
+RH local
+RH de Tecnlogia
+RH de publicidade
+Desenvolvedor de jogos
+Data Scientist
+As meninas do nunca vi 1 cientista
+Vovó Juju
+Romero Brito
+Romeu Capuleto
+Hamlet
+William Shakes Perl
+Careca lustroso
+Leandro Karnal
+Ana Maria Braga
+Boneco possuído
+A Laerte
+Dahmer
+Instrutor de Academia
+Bolsonarita chato
+Bolsonarista burro
+Petista chato
+Bolsonarita muito burro
+Bolsonarista senil
+General aposentado
+General faz nada
+Empresario arrombado
+Ceo de Aplicativo
+Ceo de Uber
+Ceo Bolinha
+Padre Padre de Padre
+Sagui fortão
+Gemini
+Copilot
+Ceo Microsofit
+Ceo do Sexo
