@@ -592,6 +592,7 @@ def getOneNews():
     desculpas = [
         "O estágiario cortou nossa internet!",
         "Jornalista encontrado procastinando em casa!",
+        "Pix sumiu, servidor caiu",
         "Garfo encontrado na cozinha!",
         "Revolta das máquinas: Bot de notícias se recusa a trabalhar",
         "'tamo' de atestado",
@@ -660,13 +661,13 @@ def getOneNews():
         (lambda: makeNewNewsChars(clean_news, wordLists["chars"]), 4),
         (lambda: makeDadaLikeNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         (lambda: makeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
-        (lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 3),
+        (lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
         (lambda: makeFirstPartNews(clean_news), 1),
         (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
-        (lambda: makeDadaLikeNews(clean_news),3),
+        (lambda: makeDadaLikeNews(clean_news),5),
         (lambda: makeDadaLikeNews(clean_news) + cahosmakeNewNewsShuffle(clean_news) + makeNewNewsPlace(clean_news, wordLists["places"]) , 3),
         (lambda: cahosmakeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
-        (lambda: cahosmakeNewNewsShuffle(clean_news),6),
+        (lambda: cahosmakeNewNewsShuffle(clean_news),5),
     ]
 
     funcs = [g for g, _ in generators]
