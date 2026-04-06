@@ -418,6 +418,7 @@ preconceito racial
 preconceito social
 covas
 Síndrome
+tumor
 naufragam
 
 # ======================
