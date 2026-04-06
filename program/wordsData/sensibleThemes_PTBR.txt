@@ -417,6 +417,7 @@ discriminacao social
 preconceito racial
 preconceito social
 covas
+Síndrome
 
 # ======================
 # DROGAS
