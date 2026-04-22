@@ -465,3 +465,6 @@ grave
 diocast
 band
 globo
+g1
+SBTBrasil
+crianças

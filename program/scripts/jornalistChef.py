@@ -783,9 +783,10 @@ def getOneNews():
     ]'''
 
     valid_titles = [t for t in generated_list if isValidPart(t)]
-
     if not valid_titles:
-        return random.choice(clean_news)
+        titulo = random.choice(clean_news)
+        titulo = forceMutation(titulo)
+        return finalizeTitle(titulo)
     for _ in range(3):
         titulo = random.choice(valid_titles)
         if not endsBadly(titulo):
@@ -794,12 +795,19 @@ def getOneNews():
         return applyNewsStyle(random.choice(clean_news))
 
     titulo = randomWordSwap(titulo, wordLists)
+    titulo = forceMutation(titulo) # só por preucaução
     titulo = finalizeTitle(titulo)
     pontuacao = ['','','','.','?','!','!!!','',' #post',' ','',''] #gambiarra passou para cá
     titulo = titulo.strip() + random.choice(pontuacao)
 
     return titulo
 
+def forceMutation(title):
+    if random.random() < 0.5:
+        wordLists = loadWordLists()
+        title = randomWordSwap(title, wordLists)
+
+    return title
 
 def wrap_generator(gen_func):
     def wrapped():
