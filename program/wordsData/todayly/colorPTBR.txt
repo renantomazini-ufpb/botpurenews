@@ -23,6 +23,7 @@ salmão
 coral
 lavanda
 grafite
+violenta
 azul marinho
 verde musgo
 verde limão
