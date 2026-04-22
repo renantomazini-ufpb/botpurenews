@@ -716,7 +716,7 @@ def getOneNews():
         (lambda: makeDadaLikeNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         #(lambda: makeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         (lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
-        (lambda: makeFirstPartNews(clean_news), 1),
+        #(lambda: makeFirstPartNews(clean_news), 1),
         (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
         (lambda: makeDadaLikeNews(clean_news),7),
         #(lambda: makeDadaLikeNews(clean_news) + cahosmakeNewNewsShuffle(clean_news) + makeNewNewsPlace(clean_news, wordLists["places"]) , 3),
