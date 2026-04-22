@@ -624,7 +624,7 @@ def smartJoin(p1, p2):
 #tinha isso em outra versão, vai ser foda
 def randomWordSwap(title, wordLists):
     # alterar chances
-    if random.random() > 0.18:
+    if random.random() > 0.5:
         return title
 
     words = title.split()
@@ -802,11 +802,15 @@ def getOneNews():
     return titulo
 
 def forceMutation(title):
-    if random.random() < 0.5:
-        wordLists = loadWordLists()
-        title = randomWordSwap(title, wordLists)
+    wordLists = loadWordLists()
 
-    return title
+    for _ in range(5):  # tenta várias vezes
+        new_title = randomWordSwap(title, wordLists)
+        if new_title != title:
+            return new_title
+
+    # fallback mais agressivo
+    return applyNewsStyle(title)
 
 def wrap_generator(gen_func):
     def wrapped():
