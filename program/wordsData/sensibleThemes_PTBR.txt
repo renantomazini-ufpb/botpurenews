@@ -20,6 +20,7 @@ feridos
 ferida
 feridas
 atropelada
+mutilação
 assassinato
 assassinar
 assassino
