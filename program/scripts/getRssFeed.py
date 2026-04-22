@@ -17,7 +17,7 @@ def getNews():
     if not rss_list:
         return []
 
-    urls = random.sample(rss_list, k=min(5, len(rss_list))) #ao invés do choice, usarei o sample, evitar duplicatas
+    urls = random.sample(rss_list, k=min(4, len(rss_list))) #ao invés do choice, usarei o sample, evitar duplicatas
     #print("Feeds selecionados:") #colocando por controle por enquanto
     #for url in urls:
     #    print(url)

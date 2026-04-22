@@ -5,6 +5,7 @@ import re
 import unicodedata
 
 #smells bad? Mas confia
+
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
@@ -353,7 +354,7 @@ def makeNewNewsChars(news_list, chars):
 
         char = random.choice(chars)
         connector = ', ' + random.choice([
-            "com", "acompanhado de", "diz", "segundo","diz",
+            "com", "acompanhado de", "diz", "segundo","diz","escreve","escreve"
             "argumenta", "afirma", "diz especialista", "diz especialista", "comenta",
             "complementa", "escreve", "posta","relata", "segundo especialista", "grava",
             "conclui", "comenta", "tweeta", "debocha", "segundo testemunnha"
@@ -392,7 +393,8 @@ def makePlotTwistNews(news_list):
 
     for n in news_list:
         twist = random.choice([
-            "mas ninguém esperava",
+            "e bolsa reage",
+            "analistas comentam",
             "e tudo muda",
             "e surpreende",
             "e termina de forma inesperada",
@@ -418,18 +420,18 @@ def makeDadaLikeNews(news_list):
     for n in news_list:
         for w in n.lower().split():
             w = w.strip(".,:;!?()[]\"'")
-            if len(w) > 3:
+            if len(w) > 4:  # aumenta filtro
                 word_pool.append(w)
 
     if not word_pool:
         return []
 
-    for _ in range(10):
+    for _ in range(20):  # mais tentativas
         common_word = random.choice(word_pool)
 
         matches = [
             n for n in news_list
-            if common_word in n.lower().split()
+            if re.search(rf'\b{re.escape(common_word)}\b', n, re.IGNORECASE)
         ]
 
         if len(matches) < 2:
@@ -437,16 +439,44 @@ def makeDadaLikeNews(news_list):
 
         n1, n2 = random.sample(matches, 2)
 
-        try:
-            part1 = n1.lower().split(common_word)[0].strip()
-            part2 = n2.lower().split(common_word)[-1].strip()
+        part1, _ = split_by_word(n1, common_word)
+        _, part2 = split_by_word(n2, common_word)
 
-            return [applyNewsStyle(f"{part1} {common_word} {part2}")]
-        except:
+        if not part1 or not part2:
             continue
+
+        candidate = f"{part1} {common_word} {part2}"
+        candidate = finalizeTitle(candidate)
+
+        if isCoherent(candidate):
+            return [applyNewsStyle(candidate)]
 
     return []
 
+def split_by_word(text, word):
+    parts = re.split(rf'\b{re.escape(word)}\b', text, flags=re.IGNORECASE)
+    if len(parts) >= 2:
+        return parts[0].strip(), parts[-1].strip()
+    return None, None
+
+def isCoherent(text):
+    # evita repetições?
+    if re.search(r'\b(\w+)\s+\1\b', text, re.IGNORECASE):
+        return False
+
+    bad_patterns = [
+        r'\b(em|de|para|com)\s+(em|de|para|com)\b',
+        r'\b(que|e|mas)\s+(que|e|mas)\b',
+    ]
+
+    for p in bad_patterns:
+        if re.search(p, text, re.IGNORECASE):
+            return False
+
+    if len(text.split()) < 4:
+        return False
+
+    return True
 
 def makeFirstPartNews(news_list):
     if not news_list:
@@ -504,10 +534,10 @@ def combineStyles(news_list, generators, wordLists):
             pass
         
     if random.random() < 0.5:
-        title = replaceConnectorsWithComma(title)
-    title = re.sub(r'\s+', ' ', title)  # remove espaços duplicados
-    title = re.sub(r'\s+,', ',', title)  # remove espaço antes de vírgula
-    title = re.sub(r',\s*,', ',', title)  # remove vírgula dupla
+        title = replaceConnectorsWithComma(title) # se eu tratar aqui????
+    title = re.sub(r'\s+', ' ', title)  
+    title = re.sub(r'\s+,', ',', title)  
+    title = re.sub(r',\s*,', ',', title)  
     title = re.sub(r'\b(em|de|para|com)\s*,', ',', title)
     title = title.strip()
 
@@ -518,7 +548,6 @@ def endsBadly(text):
     return re.search(r'\b(em|de|para|com)$', text.strip())
 
 def replaceConnectorsWithComma(title):
-    # Conectivos que viram vírgula (adicionamos mais alguns)
     connectors = [
         r'\s+e\s+', r'\s+mas\s+', r'\s+porém\s+', 
         r'\s+no entanto\s+', r'\s+contudo\s+', 
@@ -526,10 +555,10 @@ def replaceConnectorsWithComma(title):
     ]
 
     for c in connectors:
-        # Troca o conectivo por vírgula + espaço
+
         title = re.sub(c, ', ', title, flags=re.IGNORECASE)
 
-    # Limpa vírgulas duplicadas (,,) e espaços extras antes da vírgula
+
     title = re.sub(r'\s*,\s*', ', ', title)
     title = re.sub(r',+', ',', title)
 
@@ -546,16 +575,51 @@ def splitByCommaStyle(title):
 
     return title
 
+def smartCut(title):
+    bad_end = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b$'
+    parts = re.split(r'[,:;]', title)
+    if len(parts) > 1:
+        p1 = parts[0].strip()
+        p2 = " ".join(parts[1:]).strip()
+    else:
+        words = title.split()
+        if len(words) < 4:
+            return title, ""
+
+        mid = len(words) // 2
+        p1 = " ".join(words[:mid])
+        p2 = " ".join(words[mid:])
+
+    # limpa final ruim
+    p1 = re.sub(bad_end, '', p1, flags=re.IGNORECASE).strip()
+
+    # evita pedaço vazio
+    if len(p1.split()) < 2:
+        return title, ""
+
+    return p1, p2
+
+def smartJoin(p1, p2):
+    connectors = [
+        "após", "durante", "enquanto", "com", "e", 
+        "em meio a", "após caso em que", "depois que", "e", "logo então"
+    ]
+
+    c = random.choice(connectors)
+
+    if p2.lower().startswith(c):
+        return f"{p1} {p2}"
+
+    return f"{p1} {c} {p2}"
 
 #tinha isso em outra versão, vai ser foda
 def randomWordSwap(title, wordLists):
     # alterar chances
-    if random.random() > 0.25:
+    if random.random() > 0.18:
         return title
 
     words = title.split()
     
-    # pega  palavras com mais de 5 letras
     valid_indices = [
         i for i, w in enumerate(words)
         if len(re.sub(r'[^\w]', '', w)) > 5
@@ -566,8 +630,8 @@ def randomWordSwap(title, wordLists):
 
     idx = random.choice(valid_indices)
 
-    # junta pools de substituição
-    pool = wordLists.get("objects", []) + wordLists.get("chars", [])
+    # juntar pools de substituição ?
+    pool = wordLists.get("objects", [])# + wordLists.get("chars", [])
     if not pool:
         return title
 
@@ -590,6 +654,7 @@ def getOneNews():
     clean_news = cleanSensibleNews(news, sensibleThemes)
 
     desculpas = [
+        "Jornalismo de qualidade exige discursos",
         "O estágiario cortou nossa internet!",
         "Jornalista encontrado procastinando em casa!",
         "Pix sumiu, servidor caiu",
@@ -643,28 +708,17 @@ def getOneNews():
             [
                 lambda: makeDadaLikeNews(clean_news),
                 lambda: makeNewNewsShuffle(clean_news),
-                lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
-                lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
-            ],
-            wordLists
-        ), 1),
-        (lambda: combineStyles(
-            clean_news,
-            [
-                lambda: makeDadaLikeNews(clean_news),
-                lambda: makeNewNewsShuffle(clean_news),
                 lambda: makeNewNewsPlace(clean_news, wordLists["places"])
             ],
             wordLists
         ), 1),
         (lambda: makeNewNewsShuffle(clean_news), 5),
-        (lambda: makeNewNewsChars(clean_news, wordLists["chars"]), 2),
         (lambda: makeDadaLikeNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         #(lambda: makeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         #(lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
-        (lambda: makeFirstPartNews(clean_news), 1),
+        #(lambda: makeFirstPartNews(clean_news), 1),
         (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
-        (lambda: makeDadaLikeNews(clean_news),1),
+        (lambda: makeDadaLikeNews(clean_news),7),
         #(lambda: makeDadaLikeNews(clean_news) + cahosmakeNewNewsShuffle(clean_news) + makeNewNewsPlace(clean_news, wordLists["places"]) , 3),
         (lambda: cahosmakeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         (lambda: cahosmakeNewNewsShuffle(clean_news),1),

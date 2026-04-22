@@ -12,4 +12,4 @@ def getANews():
     return getOneNews()
 
 
-PrintNews(3)
+PrintNews(4)

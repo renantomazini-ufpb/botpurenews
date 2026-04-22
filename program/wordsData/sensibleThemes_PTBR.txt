@@ -7,6 +7,7 @@ escravização
 escravidão
 escravo
 morre
+morrem
 atropelado
 morrer
 morreu
@@ -368,6 +369,7 @@ odio
 ódio
 odio racial
 ódio racial
+antirracista
 intolerancia
 intolerância
 intolerante
@@ -430,6 +432,7 @@ entorpecente
 heroina
 trafico de drogas
 traficante
+gravemente
 overdose
 
 # ======================

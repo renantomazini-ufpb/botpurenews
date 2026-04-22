@@ -1,4 +1,5 @@
 guaxinim
+lontra
 capivara
 ornitorrinco
 axolote
