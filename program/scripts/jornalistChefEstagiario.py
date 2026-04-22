@@ -624,7 +624,7 @@ def smartJoin(p1, p2):
 #tinha isso em outra versão, vai ser foda
 def randomWordSwap(title, wordLists):
     # alterar chances
-    if random.random() > 0.5:
+    if random.random() > 0.70:
         return title
 
     words = title.split()
