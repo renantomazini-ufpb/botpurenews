@@ -153,13 +153,13 @@ def applyNewsStyle(title):
         "{} vira destaque",
         "{}, veja as imagens",
         "{} #nuticia", 
-        "{} s̵u̵d̷o̵ ̸a̸p̵t̴-̶g̸e̷t̵ ̵v̸i̸d̸a̴",
-        "{} #getlife",
         "{} #bot",
         "{} #purenews",
         "{} #dadaismo",
         "{} 🔥🔥🔥🔥🔥",
         "{} 🔴",
+        "{} 😨",
+        "{} 😨",
         "{} 😨",
         "{}; :)",
         "{} 🙄​",
@@ -711,11 +711,11 @@ def getOneNews():
             ],
             wordLists
         ), 1),
-        (lambda: makeNewNewsShuffle(clean_news), 5),
+        (lambda: makeNewNewsShuffle(clean_news), 3),
         (lambda: makeDadaLikeNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         #(lambda: makeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
-        #(lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
-        #(lambda: makeFirstPartNews(clean_news), 1),
+        (lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
+        (lambda: makeFirstPartNews(clean_news), 1),
         (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
         (lambda: makeDadaLikeNews(clean_news),7),
         #(lambda: makeDadaLikeNews(clean_news) + cahosmakeNewNewsShuffle(clean_news) + makeNewNewsPlace(clean_news, wordLists["places"]) , 3),
@@ -723,8 +723,13 @@ def getOneNews():
         (lambda: cahosmakeNewNewsShuffle(clean_news),1),
     ]
 
-    funcs = [g for g, _ in generators]
-    weights = [w for _, w in generators]
+    wrapped_generators = [
+        (wrap_generator(g), w)
+        for g, w in generators
+    ]
+
+    funcs = [g for g, _ in wrapped_generators]
+    weights = [w for _, w in wrapped_generators]
 
     generated_list = random.choices(funcs, weights=weights, k=1)[0]()
     '''generators = [ #chei de gabiarra
@@ -793,3 +798,24 @@ def getOneNews():
     titulo = titulo.strip() + random.choice(pontuacao)
 
     return titulo
+
+
+def wrap_generator(gen_func):
+    def wrapped():
+        try:
+            result = gen_func()
+
+            if not result:
+                return []
+
+            # garante que é lista
+            if isinstance(result, str):
+                return [result]
+
+            # escolhe só 1 saída
+            return [random.choice(result)]
+
+        except:
+            return []
+
+    return wrapped

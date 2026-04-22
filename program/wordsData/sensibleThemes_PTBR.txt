@@ -458,3 +458,10 @@ hospitalizado
 interna
 internado
 grave
+
+# ======================
+# propaganda
+# ======================
+diocast
+band
+globo
