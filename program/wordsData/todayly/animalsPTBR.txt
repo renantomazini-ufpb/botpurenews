@@ -1,5 +1,6 @@
 guaxinim
 lontra
+ratola
 capivara
 ornitorrinco
 axolote

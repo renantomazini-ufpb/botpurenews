@@ -15,6 +15,11 @@ morto
 matar
 matou
 matando
+ferido
+feridos
+ferida
+feridas
+atropelada
 assassinato
 assassinar
 assassino
