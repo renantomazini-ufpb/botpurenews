@@ -261,12 +261,17 @@ def avoidRepetition(text):
     return " ".join(result)
 
 def isValidPart(text):
-    if not text or len(text.split()) < 2:
+    if not text or len(text.split()) < 3:
         return False
-    # Evita que a parte termine em conectivos que pedem complemento
-    invalid_ends = r'\b(com|de|para|em|que|o|a|os|as|e|no|na)$'
-    if re.search(invalid_ends, text.strip(), flags=re.IGNORECASE):
+
+    # começa estranho
+    if re.match(r'^(que|e|mas|porém|quando)\b', text, re.IGNORECASE):
         return False
+
+    # termina estranho
+    if re.search(r'\b(com|de|para|em|que|o|a|e)$', text, re.IGNORECASE):
+        return False
+
     return True
 
 def makeNewNewsShuffle(news_list):
@@ -655,6 +660,16 @@ def randomWordSwap(title, wordLists):
     return " ".join(words)
 
 
+def safeWordSwap(title, wordLists):
+    if random.random() > 0.3:
+        return title
+
+    if not re.search(r'\b(de|com|em)\b', title):
+        return title
+
+    return randomWordSwap(title, wordLists)
+
+
 # Essa aqui vou botar para testar
 def getOneNews():
     sensibleThemes = loadSensibleThemes(caminho)
@@ -793,7 +808,7 @@ def getOneNews():
     else:
         return applyNewsStyle(random.choice(clean_news))
 
-    titulo = randomWordSwap(titulo, wordLists)
+    titulo = safeWordSwap(titulo, wordLists)
     titulo = forceMutation(titulo) # só por preucaução
     titulo = finalizeTitle(titulo)
     pontuacao = ['','','','.','?','!','!!!','',' #post',' ','',''] #gambiarra passou para cá
@@ -805,7 +820,7 @@ def forceMutation(title):
     wordLists = loadWordLists()
 
     for _ in range(5):  # tenta várias vezes
-        new_title = randomWordSwap(title, wordLists)
+        new_title = safeWordSwap(title, wordLists)
         if new_title != title:
             return new_title
 
@@ -831,3 +846,5 @@ def wrap_generator(gen_func):
             return []
 
     return wrapped
+
+
