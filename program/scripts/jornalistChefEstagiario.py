@@ -82,30 +82,7 @@ def loadWordLists():
     # 3. fallback (corte simples)
     return cutTitles(title)'''
 
-def smartCut(title): #thanks copilot
-    # Conectivos que naum podem ficar no final da primeira parte nem no início da segunda
-    bad_words = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b'
 
-    # 1. Tenta cortar por pontuação forte
-    parts = re.split(r'[,:;]', title)
-    if len(parts) > 1:
-        p1, p2 = parts[0].strip(), " ".join(parts[1:]).strip()
-        # Se a primeira parte terminar em "lixo", limpa
-        p1 = re.sub(bad_words + r'\s*$', '', p1, flags=re.IGNORECASE).strip()
-        return p1, p2
-
-    # 2. Se não tem pontuação, corta no meio, mas foge das "bad_words"
-    words = title.split()
-    if len(words) < 4: return title, ""
-    
-    mid = len(words) // 2
-    # Se a palavra do meio for um conectivo, pula ela
-    if re.match(bad_words, words[mid-1], re.IGNORECASE):
-        mid -= 1
-        
-    p1 = " ".join(words[:mid])
-    p2 = " ".join(words[mid:])
-    return p1, p2
 
 
 def cutTitles(title):
@@ -139,11 +116,20 @@ def fixConnectiveCollisions(text):
 # estilistica
 def applyNewsStyle(title):
     patterns = [
+        "{}",
+        "{}",
+        "{}",
+        "{}; mercado reage bem",
+        "{}; mercado reage mal",
+        "{}; veja o vídeo",
+        "{}; mais no site",
         "{}: entenda o caso",
+        "{}",
         "{}; veja detalhes",
         "{} e mercado reage",
         "{} e viraliza",
         "{} e gera reação",
+        "{}",
         "{} e repercute nas redes",
         "{} e levanta debate",
         "{}, argumentam especialistas",
@@ -152,25 +138,30 @@ def applyNewsStyle(title):
         "{} chama atenção",
         "{} vira destaque",
         "{}, veja as imagens",
-        "{} #nuticia", 
         "{} #bot",
+        "{}",
         "{} #purenews",
+        "{}",
         "{} #dadaismo",
-        "{} 🔥🔥🔥🔥🔥",
-        "{} 🔴",
+        "{}",
+        "{}; apura reporter",
+        "{}; deve ser IA, apura reporter",
+        "{}",
         "{} 😨",
-        "{} 😨",
-        "{} 😨",
+        "{}; :)",
+        "{}; é 13🌟!",
         "{}; :)",
         "{} 🙄​",
         "{} 😁​​",
         "{} 🤪​",
-        "{} 🤪🤪🤪​",
+        "{} 🤪​",
         "{} :P",
         "{} :O",
-         "{} ¯\\_(ツ)_/¯",
-         "{} !",
-         "{} !?",
+        "{} ¯\\_(ツ)_/¯",
+        "{} !",
+        "{} !?",
+        "{} ?",
+        "{}",
     ]
 
     pattern = random.choice(patterns)
@@ -358,7 +349,7 @@ def makeNewNewsChars(news_list, chars):
 
         char = random.choice(chars)
         connector = ', ' + random.choice([
-            "com", "acompanhado de", "diz", "segundo","diz","escreve","escreve"
+            "com", "acompanhado de", "diz", "segundo","diz","escreve","escreve",
             "argumenta", "afirma", "diz especialista", "diz especialista", "comenta",
             "complementa", "escreve", "posta","relata", "segundo especialista", "grava",
             "conclui", "comenta", "tweeta", "debocha", "segundo testemunnha"
@@ -430,7 +421,7 @@ def makeDadaLikeNews(news_list):
     if not word_pool:
         return []
 
-    for _ in range(20):  # mais tentativas
+    for _ in range(10):  # mais tentativas
         common_word = random.choice(word_pool)
 
         matches = [
@@ -589,7 +580,7 @@ def splitByCommaStyle(title):
 
     return title
 
-def smartCut(title):
+'''def smartCut(title):
     bad_end = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b$'
     parts = re.split(r'[,:;]', title)
     if len(parts) > 1:
@@ -608,6 +599,60 @@ def smartCut(title):
     p1 = re.sub(bad_end, '', p1, flags=re.IGNORECASE).strip()
 
     # evita pedaço vazio
+    if len(p1.split()) < 2:
+        return title, ""
+
+    return p1, p2'''
+
+'''def smartCut(title): #thanks copilot
+    # Conectivos que naum podem ficar no final da primeira parte nem no início da segunda
+    bad_words = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b'
+
+    # 1. Tenta cortar por pontuação forte
+    parts = re.split(r'[,:;]', title)
+    if len(parts) > 1:
+        p1, p2 = parts[0].strip(), " ".join(parts[1:]).strip()
+        # Se a primeira parte terminar em "lixo", limpa
+        p1 = re.sub(bad_words + r'\s*$', '', p1, flags=re.IGNORECASE).strip()
+        return p1, p2
+
+    # 2. Se não tem pontuação, corta no meio, mas foge das "bad_words"
+    words = title.split()
+    if len(words) < 4: return title, ""
+    
+    mid = len(words) // 2
+    # Se a palavra do meio for um conectivo, pula ela
+    if re.match(bad_words, words[mid-1], re.IGNORECASE):
+        mid -= 1
+        
+    p1 = " ".join(words[:mid])
+    p2 = " ".join(words[mid:])
+    return p1, p2'''
+
+#essa vai ser definitiva?
+def smartCut(title):
+    bad_words = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b'
+
+    parts = re.split(r'[,:;]', title) #tava com erro
+    if len(parts) > 1:
+        p1 = parts[0].strip()
+        p2 = " ".join(parts[1:]).strip()
+    else:
+        words = title.split()
+        if len(words) < 4:
+            return title, ""
+
+        mid = len(words) // 2
+
+        if re.match(bad_words, words[mid-1], re.IGNORECASE):
+            mid -= 1
+
+        p1 = " ".join(words[:mid])
+        p2 = " ".join(words[mid:])
+
+
+    p1 = re.sub(bad_words + r'\s*$', '', p1, flags=re.IGNORECASE).strip()
+
     if len(p1.split()) < 2:
         return title, ""
 
@@ -677,6 +722,15 @@ def getOneNews():
     news = getNews()
     clean_news = cleanSensibleNews(news, sensibleThemes)
 
+    if clean_news and random.random() < 0.5:
+        dada = makeDadaLikeNews(clean_news)
+        if dada:
+            titulo = random.choice(dada)
+            titulo = safeWordSwap(titulo, wordLists)
+            titulo = finalizeTitle(titulo)
+            return titulo
+
+
     desculpas = [
         "Jornalismo de qualidade exige discursos",
         "O estágiario cortou nossa internet!",
@@ -732,7 +786,7 @@ def getOneNews():
         (lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
         #(lambda: makeFirstPartNews(clean_news), 1),
         (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
-        (lambda: makeDadaLikeNews(clean_news),7),
+        (lambda: makeDadaLikeNews(clean_news),10),
         #(lambda: makeDadaLikeNews(clean_news) + cahosmakeNewNewsShuffle(clean_news) + makeNewNewsPlace(clean_news, wordLists["places"]) , 3),
         (lambda: cahosmakeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
         (lambda: cahosmakeNewNewsShuffle(clean_news),1),

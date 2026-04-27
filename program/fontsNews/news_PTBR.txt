@@ -43,3 +43,5 @@ https://www.youtube.com/feeds/videos.xml?channel_id=UCaGmdJSSiR7fkh2A-c6emsA
 https://www.youtube.com/feeds/videos.xml?channel_id=UCoa-D_VfMkFrCYodrOC9-mA
 https://www.youtube.com/feeds/videos.xml?channel_id=UC376n347Ob5Lwzq2WGzF1AA
 https://www.youtube.com/feeds/videos.xml?channel_id=UCuiLR4p6wQ3xLEm15pEn1Xw
+https://feeds.feedburner.com/asbeiras
+https://www.ogol.com.br/rss/noticias.php

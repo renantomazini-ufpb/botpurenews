@@ -23,15 +23,11 @@ def getNews():
     #    print(url)
 
     for url in urls:
-        #feed = feedparser.parse(url)
-        feed = feedparser.parse(url, request_headers={'User-Agent': 'Mozilla/5.0'})
-        if feed.bozo:
-            #print("Erro:", feed.bozo_exception) #haha, bozo
-            continue
-
-        for entry in feed.entries:
-            if hasattr(entry, "title"):
-                titlesNews.append(entry.title)
+        feed = feedparser.parse(url)
+        entries = [e.title for e in feed.entries if hasattr(e, "title")]
+        
+        sample = random.sample(entries, k=min(8, len(entries)))
+        titlesNews.extend(sample)
 
     titlesNews = list(set(titlesNews))
     random.shuffle(titlesNews)  

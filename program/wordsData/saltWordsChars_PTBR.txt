@@ -1,15 +1,19 @@
 # ======================
 # POLÍTICA / FIGURAS REAIS
 # ======================
-Leo Bins
+Kleber Medonça Pai
+a cartonista Laerte
 Kojima
+DOM BDSM
+SUB BDSM
+Switch BDSM
 Lênin
 Marx
 Meu vizinho
 Luiz Inácio Lula da Silva
 Jair Tripa Solta
 Luiz Inácio Lula da Silva
-Donald Trump, o cara que tá no Epstein files
+Donald Trump
 Vladimir Putin
 Elon Musk
 Mark Zuckerberg
@@ -65,8 +69,6 @@ Desenvolvedor Python
 Senador chato
 Senadora
 Senadores
-
-
 # ======================
 # FILMES / SÉRIES
 # ======================
@@ -87,16 +89,13 @@ Stray Kids
 BTS
 Cebolinha
 Mônica
-Galo de tá dando Onda
 Furry gostoso
 Cain, irmão de Abel
 São Pedro
 São Paulo
 São Matheus
-Adv Phoenix Wright
 Promotor Miles Edgeworth
 Detetive
-
 # ======================
 # MEMES / INTERNET
 # ======================
@@ -107,8 +106,6 @@ Neto Felipe
 Sensacionalista
 Videoensaista
 Tio Paulo
-
-
 # ======================
 # BRASIL / MÍDIA
 # ======================
@@ -121,8 +118,6 @@ Vocalista do Titãs
 Fantasma do Chico Science
 Ariano Suassuna
 Luís Fernando Verissimo
-
-
 # ======================
 # ALEATÓRIO / CAÓTICO
 # ======================
@@ -342,6 +337,17 @@ Farinha Limmer
 Médicuzinho
 Medicuzão
 Médico local
+Técnico do Flamengo
+Técnico do Internacional
+Técnico do Palmeiras, Jair Bolsonabo
+Renato Gaúcho
+Um programador obtuso
+programadora da USP
+programador do IFPB
+programador da UFRGS
+programadora UFPE
+Reitor da UniBrejo
+Dono da Varejão do Ensino
 Dr Auzio Variola
 Diretor do Souza Esporte Clube
 Torcida do Corinthians
@@ -384,3 +390,4 @@ Gemini
 Copilot
 Ceo Microsofit
 Ceo do Sexo
+Diretor do Grêmio
