@@ -11,5 +11,11 @@ def getANews():
     print("pegando news")
     return getOneNews()
 
+def PrintVideos(n):
+    print("printando videos")
+    for x in range(n):
+        print(retornaVideo())
 
-PrintNews(4)
+
+PrintNews(5)
+#PrintVideos(1)

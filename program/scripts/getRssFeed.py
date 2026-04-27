@@ -34,6 +34,34 @@ def getNews():
 
     return titlesNews[:32]
 
+def getVideo():
+    titlesNews = []
+
+    base_dir = Path(__file__).resolve().parent
+    rss_path = base_dir.parent / "fontsNews" / "videos_PTBR.txt"
+
+    rss_list = loadRSSList(rss_path)
+
+    if not rss_list:
+        return []
+
+    urls = random.sample(rss_list, k=min(4, len(rss_list))) #ao invés do choice, usarei o sample, evitar duplicatas
+    #print("Feeds selecionados:") #colocando por controle por enquanto
+    #for url in urls:
+    #    print(url)
+
+    for url in urls:
+        feed = feedparser.parse(url)
+        entries = [e.title for e in feed.entries if hasattr(e, "title")]
+        
+        sample = random.sample(entries, k=min(8, len(entries)))
+        titlesNews.extend(sample)
+
+    titlesNews = list(set(titlesNews))
+    random.shuffle(titlesNews)  
+
+    return titlesNews[:32]
+
 
 
 

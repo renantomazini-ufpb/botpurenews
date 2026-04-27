@@ -1,4 +1,4 @@
-from getRssFeed import getNews
+from getRssFeed import getNews, getVideo
 from pathlib import Path
 import random
 import re
@@ -902,3 +902,18 @@ def wrap_generator(gen_func):
     return wrapped
 
 
+#deixar aqui, mas nao vi nada de bom vindo desse ainda
+def retornaVideo():
+    sensibleThemes = loadSensibleThemes(caminho)
+    wordLists = loadWordLists()
+    news = getVideo()
+    clean_news = cleanSensibleNews(news, sensibleThemes)
+
+    if clean_news and random.random() < 1.5:
+        dada = makeDadaLikeNews(clean_news)
+        if dada:
+            titulo = random.choice(dada)
+            titulo = safeWordSwap(titulo, wordLists)
+            titulo = finalizeTitle(titulo)
+            #return titulo
+            print(titulo)
