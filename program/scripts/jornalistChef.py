@@ -3,6 +3,7 @@ from pathlib import Path
 import random
 import re
 import unicodedata
+import hashlib
 
 #smells bad? Mas confia
 
@@ -64,7 +65,7 @@ def cleanSensibleNews(news_list, sensible_words):
 
 
 def maybeAddPlace(title, places):
-    if not places or random.random() > 0.20:
+    if not places or random.random() > 1.00:
         return title
 
     place = random.choice(places)
@@ -73,24 +74,33 @@ def maybeAddPlace(title, places):
 
     return f"{title} em {place}"
 
+def get_deterministic_char(title, chars):
+    # hash é foda
+    hash_object = hashlib.md5(title.encode())
+    index = int(hash_object.hexdigest(), 16) % len(chars)
+    return chars[index]
+    
 
 def maybeAddChar(title, chars):
-    if not chars or random.random() > 0.20:
+    if not chars or random.random() > 0.30:
         return title
 
-    char = random.choice(chars)
+    char = get_deterministic_char(title, chars)
 
     templates = [
         f"{title}, diz {char}",
         f"{title}, afirma {char}",
-        f"{title}, segundo {char}",
+        f"{char} comenta: {title}",
+        f"{title}; entenda a visão de {char}",
+        f"Para {char}, {title[0].lower()}{title[1:]}",
+        f"Exclusivo: {char} fala sobre {title[0].lower()}{title[1:]}",
     ]
 
     return random.choice(templates)
 
 
 def maybeSoftTwist(title):
-    if random.random() > 0.25:
+    if random.random() > 0.6:
         return title
 
     twists = [
@@ -109,7 +119,7 @@ def maybeSoftTwist(title):
 
 
 def maybeWordSwap(title):
-    if random.random() > 0.2:
+    if random.random() > 0.6:
         return title
 
     words = title.split()
@@ -145,21 +155,19 @@ def fixConnectiveCollisions(text):
     return text
 
 
-
 def finalize(title):
     title = fixConnectiveCollisions(title) 
 
     title = re.sub(r'\s+', ' ', title).strip()
     title = re.sub(r'\s+,', ',', title)
-    title = re.sub(r',\s*,', ',', title)
 
     if title:
         title = title[0].upper() + title[1:]
 
-    title = re.sub(r'\b(do|da|de|para|com|em)\s*,', ',', title, flags=re.IGNORECASE) #nao consigo juntar os dois pq??
-    title = re.sub(r'\b(de|para|com|em|por|sobre|após|enquanto)\s*$', '', title, flags=re.IGNORECASE) #nao pode sobrar
+    title = re.sub(r'\b(do|da|de|para|com|em)\s*,', ',', title, flags=re.IGNORECASE)
+    title = re.sub(r'\b(de|para|com|em|por|sobre|após|enquanto|que)\s*$', '', title, flags=re.IGNORECASE)
 
-    return title
+    return title.strip()
 
 def getOneNews():
     sensible = loadSensibleThemes(caminho)
@@ -178,17 +186,17 @@ def getOneNews():
         title = f"{n1.split(':')[0]}, {' '.join(n2.split()[-5:])}"
 
  
-    if random.random() < 0.15:
+    if random.random() < 0.3: #eu deveria arrumar isso depois
         title = maybeAddPlace(title, wordLists["places"])
 
-    if random.random() < 0.35:
+    if random.random() < 1.00:
         title = maybeAddChar(title, wordLists["chars"])
 
-    if random.random() < 0.15:
+    if random.random() < 0.60:
         title = maybeSoftTwist(title)
 
 
-    if random.random() < 0.05:
+    if random.random() < 0.50:
         title = maybeWordSwap(title)
 
     title = fillBrokenConnectives(title, wordLists)
@@ -616,7 +624,6 @@ def ensureStrongEnding(title):
     if re.match(r'^[^a-zA-ZÀ-ÿ]+$', words[-1]):
         words.pop()
 
-
     if random.random() < 0.25:
         endings = [
             "entenda",
@@ -628,7 +635,6 @@ def ensureStrongEnding(title):
             "mercado reage",
             "mas a que custo?"
         ]
-
         # só adiciona se já não parecer completo
         if words[-1].lower() not in ["reação", "detalhes", "especialista"]:
             words.append(random.choice(endings))
@@ -650,7 +656,6 @@ def removeBrokenComparisons(text):
         text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
 
     return text.strip()
-
 
 def cleanEdgeWords(text):
     return re.sub(
