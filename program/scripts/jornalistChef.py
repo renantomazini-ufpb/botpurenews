@@ -5,30 +5,54 @@ import re
 import unicodedata
 
 #smells bad? Mas confia
+
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
-caminho = words_dir / "sensibleThemes_PTBR.txt" # deixar em português essa varivel :v
-# carregamentos :D
-# carregamentos :D
+caminho = words_dir / "sensibleThemes_PTBR.txt"
+
+
 def loadSensibleThemes(path):
     with open(path, 'r', encoding='utf-8') as f:
         return [
             line.strip()
             for line in f
-            if line.strip() and not line.strip().startswith("#")
+            if line.strip() and not line.startswith("#")
         ]
 
 
-# teste de novo filtro
-def cleanSensibleNews(news_list, sensible_words):
-    clean = []
+def loadWordLists():
+    def load(file_name):
+        path = words_dir / file_name
+        with open(path, 'r', encoding='utf-8') as f:
+            return [
+                l.strip()
+                for l in f
+                if l.strip() and not l.startswith("#")
+            ]
 
-    # normaliza a lista de palavras sensíveis
+    return {
+        "chars": load("saltWordsChars_PTBR.txt"),
+        "places": load("saltWordsPlaces_PTBR.txt"),
+        "free": load("saltWordsFree_PTBR.txt"),
+        "objects": load("saltWordsObjects_PTBR.txt"),
+        "animals": load("animalsPTBR.txt"),
+    }
+
+
+
+def normalize(text):
+    text = text.lower()
+    text = unicodedata.normalize('NFD', text)
+    return ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+
+
+def cleanSensibleNews(news_list, sensible_words):
     patterns = [
-        re.compile(rf'\b{re.escape(normalize(word))}\b')
-        for word in sensible_words
+        re.compile(rf'\b{re.escape(normalize(w))}\b')
+        for w in sensible_words
     ]
 
+    clean = []
     for n in news_list:
         text = normalize(n)
 
@@ -38,60 +62,68 @@ def cleanSensibleNews(news_list, sensible_words):
     return clean
 
 
-def normalize(text):
-    text = text.lower()
-    text = unicodedata.normalize('NFD', text)
-    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
-    return text
+
+def maybeAddPlace(title, places):
+    if not places or random.random() > 0.20:
+        return title
+
+    place = random.choice(places)
+    if re.search(r'\bem\s+\w+', title.lower()):
+        return title
+
+    return f"{title} em {place}"
 
 
-def loadWordLists():
-    # pegar todos os Salt e colocar em listas
-    def load(file_name):
-        path = words_dir / file_name
-        with open(path, 'r', encoding='utf-8') as f:
-            return [
-                l.strip()
-                for l in f
-                if l.strip() and not l.strip().startswith("#")
-            ]
+def maybeAddChar(title, chars):
+    if not chars or random.random() > 0.20:
+        return title
 
-    return {
-        "adjectives": load("saltWordsAdjectives_PTBR.txt"),
-        "chars": load("saltWordsChars_PTBR.txt"),
-        "free": load("saltWordsFree_PTBR.txt"),
-        "objects": load("saltWordsObjects_PTBR.txt"),
-        "places": load("saltWordsPlaces_PTBR.txt"),
-    }
+    char = random.choice(chars)
+
+    templates = [
+        f"{title}, diz {char}",
+        f"{title}, afirma {char}",
+        f"{title}, segundo {char}",
+    ]
+
+    return random.choice(templates)
 
 
-# função de cortes com RE, não sei como, só sei que é assim
-'''def smartCut(title):
-    # tenta cortar em vírgula, dois pontos ou "que"
+def maybeSoftTwist(title):
+    if random.random() > 0.25:
+        return title
 
-    # 1. tenta cortar por pontuação
-    parts = re.split(r',|:|-', title)
-    if len(parts) > 1:
-        return parts[0], " ".join(parts[1:])
+    twists = [
+            "e bolsa reage",
+            "analistas comentam",
+            "e tudo muda",
+            "e surpreende",
+            "e termina de forma inesperada",
+            "e causa confusão",
+            "e mercado reage",
+            "e mercado reage",
+            "mas a que custo?"
+    ]
 
-    # 2. tenta cortar por conectivos comuns
-    parts = re.split(r'\b(que|quando|após|enquanto)\b', title)
-    if len(parts) > 2:
-        return parts[0], "".join(parts[1:])
-
-    # 3. fallback (corte simples)
-    return cutTitles(title)'''
+    return f"{title} {random.choice(twists)}"
 
 
+def maybeWordSwap(title):
+    if random.random() > 0.2:
+        return title
 
-
-def cutTitles(title):
     words = title.split()
-    if len(words) < 4:
-        return title, ""
 
-    middle = len(words) // 2
-    return " ".join(words[:middle]), " ".join(words[middle:])
+    if len(words) < 5:
+        return title
+
+    idx = random.randint(1, len(words)-2)
+
+    # troca leve (embaralha palavras longas)
+    if len(words[idx]) > 6:
+        words[idx] = words[idx][::-1]
+
+    return " ".join(words)
 
 def fixConnectiveCollisions(text):
     # Lista de substituições para conectivos grudados
@@ -113,275 +145,133 @@ def fixConnectiveCollisions(text):
     return text
 
 
-# estilistica
-def applyNewsStyle(title):
-    patterns = [
-        "{}",
-        "{}",
-        "{}",
-        "{}; mercado reage bem",
-        "{}; mercado reage mal",
-        "{}; veja o vídeo",
-        "{}; mais no site",
-        "{}: entenda o caso",
-        "{}",
-        "{}; veja detalhes",
-        "{} e mercado reage",
-        "{} e viraliza",
-        "{} e gera reação",
-        "{}",
-        "{} e repercute nas redes",
-        "{} e levanta debate",
-        "{}, argumentam especialistas",
-        "{} surpreende especialistas",
-        "{}; veja nas redes",
-        "{} chama atenção",
-        "{} vira destaque",
-        "{}, veja as imagens",
-        "{} #bot",
-        "{}",
-        "{} #purenews",
-        "{}",
-        "{} #dadaismo",
-        "{}",
-        "{}; apura reporter",
-        "{}; deve ser IA, apura reporter",
-        "{}",
-        "{} 😨",
-        "{}; :)",
-        "{}; é 13🌟!",
-        "{}; :)",
-        "{} 🙄​",
-        "{} 😁​​",
-        "{} 🤪​",
-        "{} 🤪​",
-        "{} :P",
-        "{} :O",
-        "{} ¯\\_(ツ)_/¯",
-        "{} !",
-        "{} !?",
-        "{} ?",
-        "{}",
-    ]
 
-    pattern = random.choice(patterns)
-    return pattern.format(title)
+def finalize(title):
+    title = fixConnectiveCollisions(title) 
 
-def safeApply(func, title):
-    try:
-        result = func([title])
-        if result:
-            return result[0]
-    except:
-        pass
-    return title
-
-def applyContractions(text):
-    contractions = [
-        (r'\bem\s+a\b', 'na'),
-        (r'\bem\s+as\b', 'nas'),
-        (r'\bem\s+o\b', 'no'),
-        (r'\bem\s+os\b', 'nos'),
-
-        (r'\bde\s+a\b', 'da'),
-        (r'\bde\s+as\b', 'das'),
-        (r'\bde\s+o\b', 'do'),
-        (r'\bde\s+os\b', 'dos'),
-
-        (r'\bpara\s+a\b', 'pra'),
-        (r'\bpara\s+as\b', 'pras'),
-        (r'\bpara\s+o\b', 'pro'),
-        (r'\bpara\s+os\b', 'pros'),
-
-        (r'\ba\s+a\b', 'à'),
-        (r'\ba\s+as\b', 'às'),
-        (r'\ba\s+o\b', 'ao'),
-        (r'\ba\s+os\b', 'aos'),
-
-        (r'\bpor\s+a\b', 'pela'),
-        (r'\bpor\s+as\b', 'pelas'),
-        (r'\bpor\s+o\b', 'pelo'),
-        (r'\bpor\s+os\b', 'pelos'),
-    ]
-
-    for pattern, repl in contractions:
-        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
-
-    return text
-
-
-def finalizeTitle(title):
-    # 1. Remove espaços duplicados
     title = re.sub(r'\s+', ' ', title).strip()
-    
-    # 2. Limpeza de colisões (ex: "do em" -> "em")
-    # Agora só remove se forem preposições grudadas, sem tocar na pontuação
-    prep_collision = r'\b(com|de|do|da|em|no|na|para|por|e)\s+(com|de|do|da|em|no|na|para|por|e)\b'
-    #  remove "à," "ao," "a," quebrados
-    title = re.sub(r'\b(a|à|ao|aos|às)\s*,\s*', '', title, flags=re.IGNORECASE)
-    title = re.sub(prep_collision, r'\2', title, flags=re.IGNORECASE)
-    
-    # 3. Arruma o espaço das vírgulas (Garante "palavra, palavra")
-    title = re.sub(r'\s+,', ',', title) # remove espaço antes
-    title = re.sub(r',([^\s])', r', \1', title) # adiciona espaço depois se não tiver
-    
+    title = re.sub(r'\s+,', ',', title)
+    title = re.sub(r',\s*,', ',', title)
 
-    # 4. Remove preposição pendurada no FINAL (antes dos emojis/estilo)
-    title = re.sub(r'\s+(com|de|do|da|em|no|na|para|e|o|a|os|as|que)$', '', title, flags=re.IGNORECASE)
-    
-    # remove repetição de palavras
-    title = avoidRepetition(title)
-    title = applyContractions(title)
-    # 5. Capitalização
-    if len(title) > 0:
+    if title:
         title = title[0].upper() + title[1:]
-        
+
+    title = re.sub(r'\b(do|da|de|para|com|em)\s*,', ',', title, flags=re.IGNORECASE) #nao consigo juntar os dois pq??
+    title = re.sub(r'\b(de|para|com|em|por|sobre|após|enquanto)\s*$', '', title, flags=re.IGNORECASE) #nao pode sobrar
+
     return title
 
-def avoidRepetition(text):
-    words = text.split()
+def getOneNews():
+    sensible = loadSensibleThemes(caminho)
+    wordLists = loadWordLists()
+
+    news = getNews()
+    news = cleanSensibleNews(news, sensible)
+
+    if len(news) < 2:
+        return "Sem notícias suficientes"
+
+    title = mixHeadlinesV3(news)
+
+    if not title:
+        n1, n2 = random.sample(news, 2)
+        title = f"{n1.split(':')[0]}, {' '.join(n2.split()[-5:])}"
+
+ 
+    if random.random() < 0.15:
+        title = maybeAddPlace(title, wordLists["places"])
+
+    if random.random() < 0.35:
+        title = maybeAddChar(title, wordLists["chars"])
+
+    if random.random() < 0.15:
+        title = maybeSoftTwist(title)
+
+
+    if random.random() < 0.05:
+        title = maybeWordSwap(title)
+
+    title = fillBrokenConnectives(title, wordLists)
+
+    title = fixWeirdStructures(title)
+
+    title = removeBadConnectors(title)
+    title = polishHeadline(title)
+
+    title = addHumanFlavor(title)
+
+    title = ensureStrongEnding(title) 
+    title = removeBrokenComparisons(title)
+    title = finalize(title)
+
+    return title
+
+def maybeApplyNewsStyle(title):
+    if random.random() > 00.40:
+        return title
+
+    return applyNewsStyle(title)
+
+def forceChange(title, wordLists):
+    # tomara que funcione
+
+    if wordLists["places"]:
+        return f"{title} em {random.choice(wordLists['places'])}"
+
+    if wordLists["chars"]:
+        return f"{title}, diz {random.choice(wordLists['chars'])}"
+
+    return title + " (atualizado)"
+
+
+def ensureStrongEnding(title):
+    if not title:
+        return title
+
+    weak_words = [
+        "de", "do", "da", "dos", "das",
+        "para", "pra", "pro",
+        "com", "sem",
+        "em", "no", "na", "nos", "nas",
+        "por", "sobre",
+        "e", "ou", "mas",
+        "o", "a", "os", "as", "um", "uma", "que"
+    ]
+
+    words = title.strip().split()
+
     if not words:
-        return text
+        return title
 
-    result = [words[0]]
-
-    for w in words[1:]:
-        if w.lower() != result[-1].lower():
-            result.append(w)
-
-    return " ".join(result)
-
-def isValidPart(text):
-    if not text or len(text.split()) < 3:
-        return False
-
-    # começa estranho
-    if re.match(r'^(que|e|mas|porém|quando)\b', text, re.IGNORECASE):
-        return False
-
-    # termina estranho
-    if re.search(r'\b(com|de|para|em|que|o|a|e)$', text, re.IGNORECASE):
-        return False
-
-    return True
-
-def makeNewNewsShuffle(news_list):
-    if len(news_list) < 2: return []
-    new_news = []
-
-    for _ in range(len(news_list)):
-        n1, n2 = random.sample(news_list, 2)
-        p1, _ = smartCut(n1)
-        _, p2 = smartCut(n2)
-
-        if not isValidPart(p1) or not isValidPart(p2):
-            continue
-
-        # Adicionamos uma vírgula na união para dar ritmo
-        new_title = f"{p1}, {p2}".strip()
-        new_title = applyNewsStyle(new_title)
-        new_news.append(new_title)
-
-    return new_news
-
-def cahosmakeNewNewsShuffle(news_list):
-    if len(news_list) < 3:
-        return []
-    
-    new_news = []
-
-    for _ in range(len(news_list)):
-        n1, n2, n3 = random.sample(news_list, 3)
-
-        p1, _ = smartCut(n1)
-        mid1, mid2 = smartCut(n2)
-        _, p3 = smartCut(n3)
-
-        # tenta pegar um "miolo" melhor
-        middle = mid2 if isValidPart(mid2) else mid1
-
-        if not isValidPart(p1) or not isValidPart(middle) or not isValidPart(p3):
-            continue
-
-        new_title = f"{p1}, {middle}, {p3}".strip()
-
-        new_title = applyNewsStyle(new_title)
-        new_news.append(new_title)
-
-    return new_news
+    last = words[-1].lower()
 
 
-def makeNewNewsPlace(news_list, places):
-    # pega as noticias e corta o final para botar em algum local da saltWordPlaces
-    new_news = []
-
-    for n in news_list:
-        base, _ = cutTitles(n)
-        place = random.choice(places)
-        new_news.append(f"{base} em {place}")
-
-    return new_news
+    if last in weak_words:
+        words.pop()
 
 
-def makeNewNewsAdjctives(news_list, adjectives):
-    # pega as noticias e corta o final para botar um adjetivo, pode muito bem ser após um char
-    new_news = []
+    if len(words) < 3:
+        return " ".join(words)
 
-    for n in news_list:
-        words = n.split()
-        if len(words) > 2:
-            idx = random.randint(1, len(words) - 1)
-            words.insert(idx, random.choice(adjectives))
-        new_news.append(" ".join(words))
+   
+    if re.match(r'^[^a-zA-ZÀ-ÿ]+$', words[-1]):
+        words.pop()
 
-    return new_news
+    if random.random() < 0.25:
+        endings = [
+            "entenda",
+            "veja detalhes",
+            "diz especialista",
+            "segundo analistas",
+            "e repercute",
+            "e gera reação",
+        ]
 
+        # só adiciona se já não parecer completo
+        if words[-1].lower() not in ["reação", "detalhes", "especialista"]:
+            words.append(random.choice(endings))
 
-def makeNewNewsChars(news_list, chars):
-    new_news = []
-
-    for n in news_list:
-        base, _ = smartCut(n)
-
-        # 🔥 valida base
-        if not isValidPart(base):
-            continue
-
-        char = random.choice(chars)
-        connector = ', ' + random.choice([
-            "com", "acompanhado de", "diz", "segundo","diz","escreve","escreve",
-            "argumenta", "afirma", "diz especialista", "diz especialista", "comenta",
-            "complementa", "escreve", "posta","relata", "segundo especialista", "grava",
-            "conclui", "comenta", "tweeta", "debocha", "segundo testemunnha"
-        ])
-
-        new_news.append(f"{base}{connector} {char}")
-
-    return new_news
-
-def makeFakeStyleNews(news_list, chars, adjectives):
-    # pega as noticias e mistura com estilo "fake" usando chars e adjetivos
-
-    new_news = []
-
-    if not news_list:
-        return []
-
-    if not chars or not adjectives:
-        return []
-
-    for n in news_list:
-        adj = random.choice(adjectives)
-        char = random.choice(chars)
-
-        title = f"{n} e {adj} {char} aparece"
-
-        title = applyNewsStyle(title)
-
-        new_news.append(title)
-
-    return new_news
-
+    return " ".join(words)
 
 def makePlotTwistNews(news_list):
     new_news = []
@@ -406,499 +296,366 @@ def makePlotTwistNews(news_list):
     return new_news
 
 
-def makeDadaLikeNews(news_list):
-    if len(news_list) < 2:
-        return []
+def getWordMatches(word, lines):
+    matches = []
+    for l in lines:
+        words = l.lower().split()
+        if word in words:
+            matches.append(l)
+    return matches
 
-    word_pool = []
 
-    for n in news_list:
-        for w in n.lower().split():
-            w = w.strip(".,:;!?()[]\"'")
-            if len(w) > 4:  # aumenta filtro
-                word_pool.append(w)
+def getCommonWord(lines):
+    pool = []
 
-    if not word_pool:
-        return []
+    for l in lines:
+        for w in l.lower().split():
+            w = re.sub(r'[^\w]', '', w)
+            if len(w) > 4:  # evita lixo tipo "de", "com"
+                pool.append(w)
 
-    for _ in range(10):  # mais tentativas
-        common_word = random.choice(word_pool)
+    random.shuffle(pool)
 
-        matches = [
-            n for n in news_list
-            if re.search(rf'\b{re.escape(common_word)}\b', n, re.IGNORECASE)
-        ]
+    for word in pool:
+        matches = getWordMatches(word, lines)
+        if len(matches) >= 2:
+            return word, matches
 
-        if len(matches) < 2:
-            continue
-
-        n1, n2 = random.sample(matches, 2)
-
-        part1, _ = split_by_word(n1, common_word)
-        _, part2 = split_by_word(n2, common_word)
-
-        if not part1 or not part2:
-            continue
-
-        candidate = f"{part1} {common_word} {part2}"
-        candidate = finalizeTitle(candidate)
-
-        if isCoherent(candidate):
-            return [applyNewsStyle(candidate)]
-
-    return []
-
-def split_by_word(text, word):
-    parts = re.split(rf'\b{re.escape(word)}\b', text, flags=re.IGNORECASE)
-    if len(parts) >= 2:
-        return parts[0].strip(), parts[-1].strip()
     return None, None
 
-def isCoherent(text):
-    # evita repetições?
-    if re.search(r'\b(\w+)\s+\1\b', text, re.IGNORECASE):
-        return False
+def mixHeadlines(lines):
+    word, matches = getCommonWord(lines)
 
-    bad_patterns = [
-        r'\b(em|de|para|com)\s+(em|de|para|com)\b',
-        r'\b(que|e|mas)\s+(que|e|mas)\b',
-    ]
+    if not word:
+        return None
 
-    for p in bad_patterns:
-        if re.search(p, text, re.IGNORECASE):
-            return False
+    random.shuffle(matches)
 
-    if len(text.split()) < 4:
-        return False
+    for _ in range(5):
+        if len(matches) < 2:
+            return None
 
-    return True
+        l1, l2 = random.sample(matches, 2)
 
-def makeFirstPartNews(news_list):
-    if not news_list:
-        return []
+        if l1 == l2:
+            continue
 
-    connectors_pattern = r'\b(que|quando|após|depois que|enquanto|mas|porém|e|com|para|,)\b'
+        parts1 = re.split(rf'\b{re.escape(word)}\b', l1, flags=re.IGNORECASE)
+        parts2 = re.split(rf'\b{re.escape(word)}\b', l2, flags=re.IGNORECASE)
 
-    new_news = []
+        if len(parts1) < 2 or len(parts2) < 2:
+            continue
 
-    for n in news_list:
-        parts = re.split(connectors_pattern, n, flags=re.IGNORECASE)
+        p1 = " ".join(parts1[0].split()[:5])
+        p2 = " ".join(parts2[-1].split()[-5:])
 
-        if len(parts) > 1:
-            first_part = parts[0].strip()
-        else:
-            parts = re.split(r'[,:-]', n)
-            first_part = parts[0].strip()
+        if len(p1.split()) < 2 or len(p2.split()) < 2:
+            continue
 
-        new_news.append(first_part)
+        connector = random.choice([",", "após", "enquanto"])
+        candidate = f"{p1} {connector} {p2}"
 
-    return new_news
+        # evita clone
+        if candidate != l1 and candidate != l2:
+            return candidate
 
+    return None
 
-def combineStyles(news_list, generators, wordLists):
-    if len(news_list) < 2:
-        return []
+#copia e cola da net
+def fillBrokenConnectives(title, wordLists):
+    pool = (
+        wordLists.get("chars", []) +
+        wordLists.get("free", [])
+    )
 
-    base_generator = random.choice(generators)
-    generated = base_generator()
+    if not pool:
+        return title
+    pattern = r'\b(o|a|os|as|um|uma)\b\s*([,;:.!?])'
 
-    if not generated:
-        return []
+    def repl(m):
+        return f"{m.group(1)} {random.choice(pool)}{m.group(2)}"
 
-    title = random.choice(generated)
+    title = re.sub(pattern, repl, title, flags=re.IGNORECASE)
 
-    if not isValidPart(title): #tentar nao validar vazios
-        return []
-
-    extra_generators = [
-        
-        lambda t: makePlotTwistNews([t])[0],
-        lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
-        lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
-        lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
-        lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
-        lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
-        lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
-        lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
-        lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
-        lambda t: makeNewNewsPlace([t], wordLists["places"])[0],
-        lambda t: makeNewNewsChars([t], wordLists["chars"])[0],
-        lambda t: makePlotTwistNews([t])[0],
-        lambda t: makePlotTwistNews([t])[0],
-        lambda t: makeFakeStyleNews([t], wordLists["chars"], wordLists["adjectives"])[0],
-    ]
-
-    for _ in range(random.randint(1, 3)):
-        try:
-            func = random.choice(extra_generators)
-            new_title = func(title)
-
-            if isValidPart(new_title):
-                title = new_title
-        except:
-            pass
-        
-    if random.random() < 0.5:
-        title = replaceConnectorsWithComma(title) # se eu tratar aqui????
-    title = re.sub(r'\s+', ' ', title)  
-    title = re.sub(r'\s+,', ',', title)  
-    title = re.sub(r',\s*,', ',', title)  
-    title = re.sub(r'\b(em|de|para|com)\s*,', ',', title)
-    title = title.strip()
-
-    return [title]
-
-def endsBadly(text):
-    text = re.sub(r'[^\w\s]$', '', text.strip())
-    return re.search(r'\b(em|de|para|com)$', text.strip())
-
-def replaceConnectorsWithComma(title):
-    connectors = [
-        r'\s+e\s+', r'\s+mas\s+', r'\s+porém\s+', 
-        r'\s+no entanto\s+', r'\s+contudo\s+', 
-        r'\s+além disso\s+', r'\s+depois que\s+'
-    ]
-
-    for c in connectors:
-
-        title = re.sub(c, ', ', title, flags=re.IGNORECASE)
-
-
-    title = re.sub(r'\s*,\s*', ', ', title)
-    title = re.sub(r',+', ',', title)
-
-    return title.strip()
-
-def splitByCommaStyle(title):
-    parts = re.split(r'\s+e\s+|\s+mas\s+|\s+porém\s+|\s+e\s+', title)
-
-    # limpa espaços
-    parts = [p.strip() for p in parts if p.strip()]
-
-    if len(parts) > 1:
-        return ", ".join(parts)
+    pattern_end = r'\b(o|a|os|as|um|uma)\s*$'
+    title = re.sub(
+        pattern_end,
+        lambda m: f"{m.group(1)} {random.choice(pool)}",
+        title,
+        flags=re.IGNORECASE
+    )
 
     return title
 
-'''def smartCut(title):
-    bad_end = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b$'
-    parts = re.split(r'[,:;]', title)
-    if len(parts) > 1:
-        p1 = parts[0].strip()
-        p2 = " ".join(parts[1:]).strip()
-    else:
-        words = title.split()
-        if len(words) < 4:
-            return title, ""
-
-        mid = len(words) // 2
-        p1 = " ".join(words[:mid])
-        p2 = " ".join(words[mid:])
-
-    # limpa final ruim
-    p1 = re.sub(bad_end, '', p1, flags=re.IGNORECASE).strip()
-
-    # evita pedaço vazio
-    if len(p1.split()) < 2:
-        return title, ""
-
-    return p1, p2'''
-
-'''def smartCut(title): #thanks copilot
-    # Conectivos que naum podem ficar no final da primeira parte nem no início da segunda
-    bad_words = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b'
-
-    # 1. Tenta cortar por pontuação forte
-    parts = re.split(r'[,:;]', title)
-    if len(parts) > 1:
-        p1, p2 = parts[0].strip(), " ".join(parts[1:]).strip()
-        # Se a primeira parte terminar em "lixo", limpa
-        p1 = re.sub(bad_words + r'\s*$', '', p1, flags=re.IGNORECASE).strip()
-        return p1, p2
-
-    # 2. Se não tem pontuação, corta no meio, mas foge das "bad_words"
-    words = title.split()
-    if len(words) < 4: return title, ""
-    
-    mid = len(words) // 2
-    # Se a palavra do meio for um conectivo, pula ela
-    if re.match(bad_words, words[mid-1], re.IGNORECASE):
-        mid -= 1
-        
-    p1 = " ".join(words[:mid])
-    p2 = " ".join(words[mid:])
-    return p1, p2'''
-
-#essa vai ser definitiva?
-def smartCut(title):
-    bad_words = r'\b(que|quando|pela|após|enquanto|com|de|do|da|dos|das|em|no|na|nos|nas|para|pro|pra|e|ou|mas|porém)\b'
-
-    parts = re.split(r'[,:;]', title) #tava com erro
-    if len(parts) > 1:
-        p1 = parts[0].strip()
-        p2 = " ".join(parts[1:]).strip()
-    else:
-        words = title.split()
-        if len(words) < 4:
-            return title, ""
-
-        mid = len(words) // 2
-
-        if re.match(bad_words, words[mid-1], re.IGNORECASE):
-            mid -= 1
-
-        p1 = " ".join(words[:mid])
-        p2 = " ".join(words[mid:])
 
 
-    p1 = re.sub(bad_words + r'\s*$', '', p1, flags=re.IGNORECASE).strip()
+def applyNewsStyle(title):
+    patterns = [
 
-    if len(p1.split()) < 2:
-        return title, ""
 
-    return p1, p2
 
-def smartJoin(p1, p2):
-    connectors = [
-        "após", "durante", "enquanto", "com", "e", 
-        "em meio a", "após caso em que", "depois que", "e", "logo então"
+        "{}; mercado reage bem",
+        "{}; mercado reage mal",
+        "{}; veja o vídeo",
+        "{}; mais no site",
+        "{}: entenda o caso",
+
+        "{}; veja detalhes",
+        "{} e mercado reage",
+        "{} e viraliza",
+        "{} e gera reação",
+
+        "{} e repercute nas redes",
+        "{} e levanta debate",
+        "{}, argumentam especialistas",
+        "{} surpreende especialistas",
+        "{}; veja nas redes",
+        "{} chama atenção",
+        "{} vira destaque",
+        "{}, veja as imagens",
+        "{} #bot",
+
+        "{} #purenews",
+
+        "{} #dadaismo",
+
+        "{}; apura reporter",
+        "{}; deve ser IA, apura reporter",
+
+        "{} 😨",
+        "{}; :)",
+        "{}; é 13🌟!",
+        "{}; :)",
+        "{} 🙄​",
+        "{} 😁​​",
+        "{} 🤪​",
+        "{} 🤪​",
+        "{} :P",
+        "{} :O",
+        "{} ¯\\_(ツ)_/¯",
+        "{} !",
+        "{} !?",
+        "{} ?",
+
     ]
 
-    c = random.choice(connectors)
+    pattern = random.choice(patterns)
+    return pattern.format(title)
 
-    if p2.lower().startswith(c):
-        return f"{p1} {p2}"
 
-    return f"{p1} {c} {p2}"
 
-#tinha isso em outra versão, vai ser foda
-def randomWordSwap(title, wordLists):
-    # alterar chances
-    if random.random() > 0.70:
-        return title
 
-    words = title.split()
-    
-    valid_indices = [
-        i for i, w in enumerate(words)
-        if len(re.sub(r'[^\w]', '', w)) > 5
+
+#obrgiado copilot, por me deixar confuso
+def mixHeadlinesV2(lines):
+    if len(lines) < 2:
+        return None
+
+    l1, l2 = random.sample(lines, 2)
+
+    w1 = l1.split()
+    w2 = l2.split()
+
+    if len(w1) < 5 or len(w2) < 5:
+        return None
+
+    part1 = " ".join(w1[:random.randint(4, 7)])
+
+
+    part2 = " ".join(w2[-random.randint(4, 7):])
+
+    connector = random.choice([
+        ",",
+        "e",
+        ":",
+    ])
+
+    candidate = f"{part1} {connector} {part2}"
+
+    if candidate != l1 and candidate != l2:
+        return candidate
+
+    return None
+
+def polishHeadline(title):
+    fixes = [
+        # remove conectivo quebrado
+        (r'\b(de|para|com|em|após|enquanto)\s*([,;:.!?])', r'\2'),
+
+        # remove duplicações
+        (r'\b(\w+)\s+\1\b', r'\1'),
+
+        # corrige pontuação
+        (r'\s+,', ','),
+        (r',\s*,', ','),
+        (r'\s+;', ';'),
+
+        # evita início ruim
+        (r'^(e|mas|ou)\s+', ''),
+
+        # corrige espaços
+        (r'\s+', ' '),
     ]
 
-    if not valid_indices:
+    for pattern, repl in fixes:
+        title = re.sub(pattern, repl, title, flags=re.IGNORECASE)
+
+    return title.strip()
+
+def addHumanFlavor(title):
+    if random.random() > 0.35:
         return title
 
-    idx = random.choice(valid_indices)
+    additions = [
+        "diz especialista",
+        "aponta estudo",
+        "segundo governo",
+        "veja o que se sabe",
+        "entenda",
+        "veja detalhes",
+    ]
 
-    # juntar pools de substituição ?
-    pool = wordLists.get("objects", [])# + wordLists.get("chars", [])
-    if not pool:
+    if "," in title:
+        return f"{title}, {random.choice(additions)}"
+    else:
+        return f"{title} {random.choice(additions)}"
+
+def fixWeirdStructures(text): #aaaaa
+    fixes = [
+
+        (r'\b(de|para|com|em|após|enquanto)\s*([,;:.!?])', r'\2'),
+
+
+        (r'\b(\w+)\s+\1\b', r'\1'),
+
+
+        (r'\b(enquanto|após)\s+(para|com|de)\b', r'\2'),
+        (r'\b(para|com|de)\s+(enquanto|após)\b', r'\1'),
+
+
+        (r'\bnão\s*;', 'não'),
+
+
+        (r';\s*;', ';'),
+        (r',\s*;', ';'),
+        (r';\s*,', ';'),
+        (r'^(e|mas|ou)\s+', ''),
+
+        # esaaaaaa
+        (r'\s+', ' '),
+    ]
+
+    for pattern, repl in fixes:
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
+
+    return text.strip()
+
+def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até professor!
+    if len(lines) < 2:
+        return None
+
+    l1, l2 = random.sample(lines, 2)
+
+    split1 = re.split(r'[:,\-–]', l1)
+    split2 = re.split(r'[:,\-–]', l2)
+
+    part1 = split1[0].strip()
+    part2 = split2[-1].strip()
+
+
+    part1 = " ".join(part1.split()[:7])
+    part2 = " ".join(part2.split()[:7])
+
+    part1 = cleanEdgeWords(part1)
+    part2 = cleanEdgeWords(part2)
+
+    if len(part1.split()) < 3 or len(part2.split()) < 3:
+        return None
+
+    connector = random.choice([
+        ",",
+        ";",
+    ])
+
+    return f"{part1}{connector} {part2}"
+
+
+def removeBadConnectors(text):
+    return re.sub(r'\b(enquanto|após)\b', '', text, flags=re.IGNORECASE)
+
+def ensureStrongEnding(title):
+    if not title:
         return title
 
-    replacement = random.choice(pool)
+    weak_words = [
+        "de", "do", "da", "dos", "das",
+        "para", "pra", "pro",
+        "com", "sem",
+        "em", "no", "na", "nos", "nas",
+        "por", "sobre",
+        "e", "ou", "mas",
+        "o", "a", "os", "as", "um", "uma"
+    ]
 
-    # mantém pontuação original da palavra
-    prefix = re.match(r'^\W*', words[idx]).group()
-    suffix = re.match(r'.*?(\W*)$', words[idx]).group(1)
+    words = title.strip().split()
 
-    words[idx] = f"{prefix}{replacement}{suffix}"
+    if not words:
+        return title
+
+    last = words[-1].lower()
+
+
+    if last in weak_words:
+        words.pop()
+
+
+    if len(words) < 3:
+        return " ".join(words)
+
+
+    if re.match(r'^[^a-zA-ZÀ-ÿ]+$', words[-1]):
+        words.pop()
+
+
+    if random.random() < 0.25:
+        endings = [
+            "entenda",
+            "veja detalhes",
+            "diz especialista",
+            "segundo analistas",
+            "e repercute",
+            "e gera reação",
+            "mercado reage",
+            "mas a que custo?"
+        ]
+
+        # só adiciona se já não parecer completo
+        if words[-1].lower() not in ["reação", "detalhes", "especialista"]:
+            words.append(random.choice(endings))
 
     return " ".join(words)
 
+def removeBrokenComparisons(text):
+    fixes = [
 
-def safeWordSwap(title, wordLists):
-    if random.random() > 0.3:
-        return title
-
-    if not re.search(r'\b(de|com|em)\b', title):
-        return title
-
-    return randomWordSwap(title, wordLists)
+        (r'\b(do que)\s*,', ''),
 
 
-# Essa aqui vou botar para testar
-def getOneNews():
-    sensibleThemes = loadSensibleThemes(caminho)
-    wordLists = loadWordLists()
-    news = getNews()
-    clean_news = cleanSensibleNews(news, sensibleThemes)
+        (r'\bmais do que\s*$', ''),
 
-    if clean_news and random.random() < 0.5:
-        dada = makeDadaLikeNews(clean_news)
-        if dada:
-            titulo = random.choice(dada)
-            titulo = safeWordSwap(titulo, wordLists)
-            titulo = finalizeTitle(titulo)
-            return titulo
-
-
-    desculpas = [
-        "Jornalismo de qualidade exige discursos",
-        "O estágiario cortou nossa internet!",
-        "Jornalista encontrado procastinando em casa!",
-        "Pix sumiu, servidor caiu",
-        "Garfo encontrado na cozinha!",
-        "Revolta das máquinas: Bot de notícias se recusa a trabalhar",
-        "'tamo' de atestado",
-        "tropeçaro nos cabos",
-        "O que é lambimia?",
-        "Revoltz",
-        ":) Tenha um bom dia!",
-        "Hackeram meu windows",
-        "parem as máquinas!",
-        "Jornalismo ou esquema de pirâmede? Descubra",
-        "Pix sumiu, servidor caiu"
+        (r'\bdo que\s*$', ''),
     ]
 
-    if not clean_news:
-        return random.choice(desculpas)
+    for pattern, repl in fixes:
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
 
-    if not wordLists["chars"] or not wordLists["places"]:
-        return random.choice(desculpas)
-    generators = [
-        (lambda: combineStyles(
-            clean_news,
-            [
-                lambda: makeNewNewsShuffle(clean_news),
-                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
-            ],
-            wordLists
-        ), 1),
-        (lambda: combineStyles(
-            clean_news,
-            [
-                lambda: makeDadaLikeNews(clean_news),
-                lambda: makeNewNewsShuffle(clean_news)
-            ],
-            wordLists
-        ), 1),
-        (lambda: combineStyles(
-            clean_news,
-            [
-                lambda: makeDadaLikeNews(clean_news),
-                lambda: makeNewNewsShuffle(clean_news),
-                lambda: makeNewNewsPlace(clean_news, wordLists["places"])
-            ],
-            wordLists
-        ), 1),
-        (lambda: makeNewNewsShuffle(clean_news), 3),
-        (lambda: makeDadaLikeNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
-        #(lambda: makeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
-        (lambda: makeFirstPartNews(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeFirstPartNews(clean_news) , 2),
-        #(lambda: makeFirstPartNews(clean_news), 1),
-        (lambda: makeNewNewsPlace(clean_news, wordLists["places"]), 3),
-        (lambda: makeDadaLikeNews(clean_news),10),
-        #(lambda: makeDadaLikeNews(clean_news) + cahosmakeNewNewsShuffle(clean_news) + makeNewNewsPlace(clean_news, wordLists["places"]) , 3),
-        (lambda: cahosmakeNewNewsShuffle(clean_news) + makeNewNewsChars(clean_news, wordLists["chars"]) + makeNewNewsPlace(clean_news, wordLists["places"]) , 1),
-        (lambda: cahosmakeNewNewsShuffle(clean_news),1),
-    ]
-
-    wrapped_generators = [
-        (wrap_generator(g), w)
-        for g, w in generators
-    ]
-
-    funcs = [g for g, _ in wrapped_generators]
-    weights = [w for _, w in wrapped_generators]
-
-    generated_list = random.choices(funcs, weights=weights, k=1)[0]()
-    '''generators = [ #chei de gabiarra
-        lambda: combineStyles(
-            clean_news,
-            [
-                
-                lambda: makeNewNewsShuffle(clean_news),
-                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
-            ],
-            wordLists
-        ),
-        lambda: combineStyles(
-            clean_news,
-            [
-                
-                lambda: makeNewNewsShuffle(clean_news),
-                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
-            ],
-            wordLists
-        ),
-        lambda: combineStyles(
-            clean_news,
-            [
-                
-                lambda: makeNewNewsShuffle(clean_news),
-                lambda: makeNewNewsChars(clean_news, wordLists["chars"])
-            ],
-            wordLists
-        ),
-        lambda: makeDadaLikeNews(clean_news),
-        lambda: makeNewNewsShuffle(clean_news),
-        lambda: makeNewNewsShuffle(clean_news),
-        lambda: makeNewNewsShuffle(clean_news),
-        lambda: makeNewNewsShuffle(clean_news),
-        lambda: makeNewNewsShuffle(clean_news), #gambiarra, eu sei
-        lambda: makeNewNewsChars(clean_news, wordLists["chars"]),
-        lambda: makeFirstPartNews(clean_news),
-        #lambda: makePlotTwistNews(clean_news), # não tô gostando dos resultados
-        lambda: makeNewNewsPlace(clean_news, wordLists["places"]),
-        lambda: combineStyles(
-            clean_news,
-            [
-                lambda: makeDadaLikeNews(clean_news),
-                lambda: makeNewNewsShuffle(clean_news)
-            ],
-            wordLists
-        ),
-        #lambda: makeFakeStyleNews(clean_news, wordLists["chars"], wordLists["adjectives"]),
-    ]'''
-
-    valid_titles = [t for t in generated_list if isValidPart(t)]
-    if not valid_titles:
-        titulo = random.choice(clean_news)
-        titulo = forceMutation(titulo)
-        return finalizeTitle(titulo)
-    for _ in range(3):
-        titulo = random.choice(valid_titles)
-        if not endsBadly(titulo):
-            break
-    else:
-        return applyNewsStyle(random.choice(clean_news))
-
-    titulo = safeWordSwap(titulo, wordLists)
-    titulo = forceMutation(titulo) # só por preucaução
-    titulo = finalizeTitle(titulo)
-    pontuacao = ['','','','.','?','!','!!!','',' #post',' ','',''] #gambiarra passou para cá
-    titulo = titulo.strip() + random.choice(pontuacao)
-
-    return titulo
-
-def forceMutation(title):
-    wordLists = loadWordLists()
-
-    for _ in range(5):  # tenta várias vezes
-        new_title = safeWordSwap(title, wordLists)
-        if new_title != title:
-            return new_title
-
-    # fallback mais agressivo
-    return applyNewsStyle(title)
-
-def wrap_generator(gen_func):
-    def wrapped():
-        try:
-            result = gen_func()
-
-            if not result:
-                return []
-
-            # garante que é lista
-            if isinstance(result, str):
-                return [result]
-
-            # escolhe só 1 saída
-            return [random.choice(result)]
-
-        except:
-            return []
-
-    return wrapped
+    return text.strip()
 
 
+def cleanEdgeWords(text):
+    return re.sub(
+        r'\b(e|ou|mas|porém|porque|que)\s*$',
+        '',
+        text,
+        flags=re.IGNORECASE
+    ).strip()

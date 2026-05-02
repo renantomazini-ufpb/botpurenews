@@ -69,6 +69,8 @@ Desenvolvedor Python
 Senador chato
 Senadora
 Senadores
+Deputado chato
+Deputada chata
 # ======================
 # FILMES / SÉRIES
 # ======================
