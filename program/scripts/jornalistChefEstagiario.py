@@ -205,7 +205,7 @@ def getOneNews():
     title = polishHeadline(title)
 
     title = addHumanFlavor(title)
-
+    title = maybeApplyNewsStyle(title)
     title = ensureStrongEnding(title) 
     title = removeBrokenComparisons(title)
     title = finalize(title)
@@ -230,54 +230,7 @@ def forceChange(title, wordLists):
     return title + " (atualizado)"
 
 
-def ensureStrongEnding(title):
-    if not title:
-        return title
 
-    weak_words = [
-        "de", "do", "da", "dos", "das",
-        "para", "pra", "pro",
-        "com", "sem",
-        "em", "no", "na", "nos", "nas",
-        "por", "sobre",
-        "e", "ou", "mas",
-        "o", "a", "os", "as", "um", "uma", "que"
-    ]
-
-    words = title.strip().split()
-
-    if not words:
-        return title
-
-    last = words[-1].lower()
-
-
-    if last in weak_words:
-        words.pop()
-
-
-    if len(words) < 3:
-        return " ".join(words)
-
-   
-    if re.match(r'^[^a-zA-ZÀ-ÿ]+$', words[-1]):
-        words.pop()
-
-    if random.random() < 0.25:
-        endings = [
-            "entenda",
-            "veja detalhes",
-            "diz especialista",
-            "segundo analistas",
-            "e repercute",
-            "e gera reação",
-        ]
-
-        # só adiciona se já não parecer completo
-        if words[-1].lower() not in ["reação", "detalhes", "especialista"]:
-            words.append(random.choice(endings))
-
-    return " ".join(words)
 
 def makePlotTwistNews(news_list):
     new_news = []
@@ -411,7 +364,6 @@ def applyNewsStyle(title):
         "{} e viraliza",
         "{} e gera reação",
 
-        "{} e repercute nas redes",
         "{} e levanta debate",
         "{}, argumentam especialistas",
         "{} surpreende especialistas",
@@ -622,6 +574,7 @@ def ensureStrongEnding(title):
     if re.match(r'^[^a-zA-ZÀ-ÿ]+$', words[-1]):
         words.pop()
 
+    
     if random.random() < 0.25:
         endings = [
             "entenda",

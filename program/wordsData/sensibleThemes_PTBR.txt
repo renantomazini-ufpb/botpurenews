@@ -20,6 +20,8 @@ matou
 matando
 ferido
 feridos
+Teerã
+Teera
 ferida
 feridas
 atropelada
