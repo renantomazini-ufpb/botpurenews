@@ -5,6 +5,7 @@ import re
 import unicodedata
 import hashlib
 
+#smells bad? Mas confia
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt"
@@ -63,10 +64,11 @@ def cleanSensibleNews(news_list, sensible_words):
 
 
 def maybeAddPlace(title, places):
-    if not places or random.random() > 1.00:
+    if not places or random.random() > 0.7:
         return title
 
-    place = random.choice(places)
+    place = get_deterministic_place(title, places)
+
     if re.search(r'\bem\s+\w+', title.lower()):
         return title
 
@@ -207,13 +209,14 @@ def getOneNews():
     title = addHumanFlavor(title)
     title = maybeApplyNewsStyle(title)
     title = ensureStrongEnding(title) 
+    title = fixWeakEndingWithPlace(title, wordLists["places"])
     title = removeBrokenComparisons(title)
     title = finalize(title)
 
     return title
 
 def maybeApplyNewsStyle(title):
-    if random.random() > 00.40:
+    if random.random() > 00.20:
         return title
 
     return applyNewsStyle(title)
@@ -417,10 +420,8 @@ def mixHeadlinesV2(lines):
     if len(w1) < 5 or len(w2) < 5:
         return None
 
-    part1 = " ".join(w1[:random.randint(4, 7)])
-
-
-    part2 = " ".join(w2[-random.randint(4, 7):])
+    part1 = smartTrim(part1)
+    part2 = smartTrim(part2)
 
     connector = random.choice([
         ",",
@@ -514,15 +515,16 @@ def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até prof
 
     l1, l2 = random.sample(lines, 2)
 
-    split1 = re.split(r'[:,\-–]', l1)
-    split2 = re.split(r'[:,\-–]', l2)
+    split1 = re.split(r'[:;\-–,.]', l1)
+    split2 = re.split(r'[:;\-–,.]', l2)
 
     part1 = split1[0].strip()
     part2 = split2[-1].strip()
 
 
-    part1 = " ".join(part1.split()[:7])
-    part2 = " ".join(part2.split()[:7])
+    part1 = smartTrim(part1)
+    part2 = smartTrim(part2)
+    part2 = part2.lower()
 
     part1 = cleanEdgeWords(part1)
     part2 = cleanEdgeWords(part2)
@@ -546,7 +548,7 @@ def ensureStrongEnding(title):
         return title
 
     weak_words = [
-        "de", "do", "da", "dos", "das",
+        "de", "do", "da", "dos", "das", "às","nesta","neste",
         "para", "pra", "pro",
         "com", "sem",
         "em", "no", "na", "nos", "nas",
@@ -575,13 +577,13 @@ def ensureStrongEnding(title):
         words.pop()
 
     
-    if random.random() < 0.25:
+    if random.random() < 0.20:
         endings = [
             "entenda",
             "veja detalhes",
             "diz especialista",
             "segundo analistas",
-            "e repercute",
+            "e repercute nas redes",
             "e gera reação",
             "mercado reage",
             "mas a que custo?"
@@ -616,3 +618,50 @@ def cleanEdgeWords(text):
         text,
         flags=re.IGNORECASE
     ).strip()
+
+def fixWeakEndingWithPlace(title, places):
+    if not title or not places:
+        return title
+
+    replacements = {
+        "em": "em {}",
+        "no": "no {}",
+        "na": "na {}",
+        "nos": "nos {}",
+        "nas": "nas {}"
+    }
+
+    words = title.strip().split()
+    last = words[-1].lower()
+
+    if last in replacements:
+        place = get_deterministic_place(title, places)
+        words[-1] = replacements[last].format(place)
+
+
+    return " ".join(words)
+
+#a versão anterior do bot tinha
+def smartTrim(text, max_words=10):
+    words = text.split()
+
+    if len(words) <= max_words:
+        return text
+
+    trimmed = words[:max_words]
+
+    bad_endings = {"de", "do", "da", "para", "com", "em", "no", "na", "e"}
+
+    while trimmed and trimmed[-1].lower() in bad_endings:
+        trimmed.pop()
+
+    return " ".join(trimmed)
+
+#basicamente igual pegar char
+def get_deterministic_place(title, places):
+    if not places:
+        return None
+
+    hash_object = hashlib.md5(title.encode())
+    index = int(hash_object.hexdigest(), 16) % len(places)
+    return places[index]
