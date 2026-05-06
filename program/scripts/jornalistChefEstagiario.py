@@ -100,7 +100,7 @@ def maybeAddChar(title, chars):
 
 
 def maybeSoftTwist(title):
-    if random.random() > 0.6:
+    if random.random() > 0.75:
         return title
 
     twists = [
@@ -408,7 +408,7 @@ def applyNewsStyle(title):
 
 
 #obrgiado copilot, por me deixar confuso
-def mixHeadlinesV2(lines):
+'''def mixHeadlinesV2(lines):
     if len(lines) < 2:
         return None
 
@@ -434,7 +434,7 @@ def mixHeadlinesV2(lines):
     if candidate != l1 and candidate != l2:
         return candidate
 
-    return None
+    return None'''
 
 def polishHeadline(title):
     fixes = [

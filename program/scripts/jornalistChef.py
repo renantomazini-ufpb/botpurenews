@@ -10,6 +10,7 @@ base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
 caminho = words_dir / "sensibleThemes_PTBR.txt"
 
+
 def loadSensibleThemes(path):
     with open(path, 'r', encoding='utf-8') as f:
         return [
@@ -99,7 +100,7 @@ def maybeAddChar(title, chars):
 
 
 def maybeSoftTwist(title):
-    if random.random() > 0.6:
+    if random.random() > 0.75:
         return title
 
     twists = [
@@ -407,7 +408,7 @@ def applyNewsStyle(title):
 
 
 #obrgiado copilot, por me deixar confuso
-def mixHeadlinesV2(lines):
+'''def mixHeadlinesV2(lines):
     if len(lines) < 2:
         return None
 
@@ -433,7 +434,7 @@ def mixHeadlinesV2(lines):
     if candidate != l1 and candidate != l2:
         return candidate
 
-    return None
+    return None'''
 
 def polishHeadline(title):
     fixes = [
@@ -660,7 +661,6 @@ def smartTrim(text, max_words=10):
 def get_deterministic_place(title, places):
     if not places:
         return None
-
     hash_object = hashlib.md5(title.encode())
     index = int(hash_object.hexdigest(), 16) % len(places)
     return places[index]
