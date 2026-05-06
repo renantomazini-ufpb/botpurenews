@@ -159,6 +159,9 @@ diabetes
 câncer
 enterro
 funeral
+hantavírus
+hantavirus
+pandemia
 
 # ======================
 # CRIME
