@@ -47,16 +47,16 @@ def normalize(text):
 
 
 def cleanSensibleNews(news_list, sensible_words):
-    patterns = [
-        re.compile(rf'\b{re.escape(normalize(w))}\b')
-        for w in sensible_words
-    ]
+    if not sensible_words:
+        return news_list
+
+    # otimizar o regex. 
+    escaped_words = [re.escape(normalize(w)) for w in sensible_words]
+    pattern = re.compile(r'\b(' + '|'.join(escaped_words) + r')\b', re.IGNORECASE)
 
     clean = []
     for n in news_list:
-        text = normalize(n)
-
-        if not any(p.search(text) for p in patterns):
+        if not pattern.search(normalize(n)):
             clean.append(n)
 
     return clean
