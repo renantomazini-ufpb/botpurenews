@@ -100,7 +100,7 @@ def maybeAddChar(title, chars):
 
 
 def maybeSoftTwist(title):
-    if random.random() > 0.75:
+    if random.random() > 0.80:
         return title
 
     twists = [
@@ -118,7 +118,7 @@ def maybeSoftTwist(title):
     return f"{title} {random.choice(twists)}"
 
 
-def maybeWordSwap(title):
+'''def maybeWordSwap(title):
     if random.random() > 0.6:
         return title
 
@@ -133,7 +133,7 @@ def maybeWordSwap(title):
     if len(words[idx]) > 6:
         words[idx] = words[idx][::-1]
 
-    return " ".join(words)
+    return " ".join(words)'''
 
 def fixConnectiveCollisions(text):
     # Lista de substituições para conectivos grudados
@@ -192,12 +192,9 @@ def getOneNews():
     if random.random() < 1.00:
         title = maybeAddChar(title, wordLists["chars"])
 
-    if random.random() < 0.60:
-        title = maybeSoftTwist(title)
 
-
-    if random.random() < 0.50:
-        title = maybeWordSwap(title)
+    '''if random.random() < 0.50:
+        title = maybeWordSwap(title)'''
 
     title = fillBrokenConnectives(title, wordLists)
 
@@ -206,8 +203,12 @@ def getOneNews():
     title = removeBadConnectors(title)
     title = polishHeadline(title)
 
-    title = addHumanFlavor(title)
-    title = maybeApplyNewsStyle(title)
+    if random.random() < 0.20:
+        title = addHumanFlavor(title)
+    elif random.random() < 0.20:
+        title = maybeApplyNewsStyle(title)
+    elif random.random() < 0.30:
+        title = maybeSoftTwist(title)
     title = ensureStrongEnding(title) 
     title = fixWeakEndingWithPlace(title, wordLists["places"])
     title = removeBrokenComparisons(title)
@@ -462,8 +463,8 @@ def polishHeadline(title):
     return title.strip()
 
 def addHumanFlavor(title):
-    if random.random() > 0.35:
-        return title
+    '''if random.random() > 1:
+        return title'''
 
     additions = [
         "diz especialista",
@@ -512,7 +513,6 @@ def fixWeirdStructures(text): #aaaaa
 def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até professor!
     if len(lines) < 2:
         return None
-
     l1, l2 = random.sample(lines, 2)
 
     split1 = re.split(r'[:;\-–,.]', l1)
@@ -520,7 +520,6 @@ def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até prof
 
     part1 = split1[0].strip()
     part2 = split2[-1].strip()
-
 
     part1 = smartTrim(part1)
     part2 = smartTrim(part2)
@@ -538,7 +537,6 @@ def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até prof
     ])
 
     return f"{part1}{connector} {part2}"
-
 
 def removeBadConnectors(text):
     return re.sub(r'\b(enquanto|após)\b', '', text, flags=re.IGNORECASE)
@@ -563,7 +561,6 @@ def ensureStrongEnding(title):
         return title
 
     last = words[-1].lower()
-
 
     if last in weak_words:
         words.pop()
@@ -622,7 +619,6 @@ def cleanEdgeWords(text):
 def fixWeakEndingWithPlace(title, places):
     if not title or not places:
         return title
-
     replacements = {
         "em": "em {}",
         "no": "no {}",

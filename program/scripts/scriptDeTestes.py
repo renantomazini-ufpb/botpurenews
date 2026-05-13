@@ -11,10 +11,10 @@ def getANews():
     print("pegando news")
     return getOneNews()
 
-def PrintVideos(n):
+'''def PrintVideos(n):
     print("printando videos")
     for x in range(n):
-        print(retornaVideo())
+        print(retornaVideo())'''
 
 
 PrintNews(5)

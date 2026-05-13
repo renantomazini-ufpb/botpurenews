@@ -26,9 +26,5 @@ https://portal.fiocruz.br/rss.xml
 https://www.ufrgs.br/ufrgs/noticias/feed
 https://metropoleonline.com.br/rss/latest-posts
 https://ojoioeotrigo.com.br/feed/
-https://revistaforum.com.br/feed
-https://piaui.uol.com.br/feed/
 https://feeds.feedburner.com/asbeiras
 https://www.ogol.com.br/rss/noticias.php
-https://www.gazetaesportiva.com/futebol/futebol-internacional/feed/
-https://www.gazetaesportiva.com/times/brasil/feed/
