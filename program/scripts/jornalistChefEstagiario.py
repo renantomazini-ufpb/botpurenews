@@ -82,9 +82,6 @@ def get_deterministic_char(title, chars):
     
 
 def maybeAddChar(title, chars):
-    if not chars or random.random() > 0.30:
-        return title
-
     char = get_deterministic_char(title, chars)
 
     templates = [
@@ -189,7 +186,7 @@ def getOneNews():
     if random.random() < 0.3: #eu deveria arrumar isso depois
         title = maybeAddPlace(title, wordLists["places"])
 
-    if random.random() < 1.00:
+    if random.random() < 0.40:
         title = maybeAddChar(title, wordLists["chars"])
 
 

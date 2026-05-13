@@ -392,3 +392,33 @@ Copilot
 Ceo Microsofit
 Ceo do Sexo
 Diretor do Grêmio
+# ======================
+# instituições
+# ======================
+INSS
+UFPB
+UFPE
+UFRGS
+UFPEL
+USP
+UFRJ
+UFMG
+MEC
+Prefeitura
+Governo
+Governo Federal
+FGV
+Ministério da Fazenda
+Ministério da economia
+Polícia Federal
+UP
+PCB
+PSTU
+PT
+PTB
+PDT
+PSOL
+PSDB
+PV
+Museu do Ipiranga
+UFMG

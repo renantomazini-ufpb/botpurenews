@@ -6,7 +6,6 @@ import unicodedata
 import hashlib
 
 
-
 #smells bad? Mas confia
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
@@ -84,9 +83,6 @@ def get_deterministic_char(title, chars):
     
 
 def maybeAddChar(title, chars):
-    if not chars or random.random() > 0.30:
-        return title
-
     char = get_deterministic_char(title, chars)
 
     templates = [
@@ -191,7 +187,7 @@ def getOneNews():
     if random.random() < 0.3: #eu deveria arrumar isso depois
         title = maybeAddPlace(title, wordLists["places"])
 
-    if random.random() < 1.00:
+    if random.random() < 0.40:
         title = maybeAddChar(title, wordLists["chars"])
 
 
@@ -654,7 +650,6 @@ def smartTrim(text, max_words=10):
         trimmed.pop()
 
     return " ".join(trimmed)
-
 
 #basicamente igual pegar char
 def get_deterministic_place(title, places):
