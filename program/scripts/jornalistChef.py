@@ -6,6 +6,9 @@ import unicodedata
 import hashlib
 
 
+
+
+
 #smells bad? Mas confia
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
@@ -326,7 +329,9 @@ def mixHeadlines(lines):
 def fillBrokenConnectives(title, wordLists):
     pool = (
         wordLists.get("chars", []) +
-        wordLists.get("free", [])
+        wordLists.get("animals", []) +
+        wordLists.get("places", []) +
+        wordLists.get("free", []) 
     )
 
     if not pool:

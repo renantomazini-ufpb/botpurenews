@@ -325,7 +325,9 @@ def mixHeadlines(lines):
 def fillBrokenConnectives(title, wordLists):
     pool = (
         wordLists.get("chars", []) +
-        wordLists.get("free", [])
+        wordLists.get("animals", []) +
+        wordLists.get("places", []) +
+        wordLists.get("free", []) 
     )
 
     if not pool:
