@@ -2,9 +2,24 @@ import feedparser
 import random
 from pathlib import Path
 
-def loadRSSList(path): #pegar a lista lá
+def loadRSSList(path):
+    feeds = {}
+
     with open(path, 'r', encoding='utf-8') as f:
-        return [line.strip() for line in f if line.strip()]
+        for line in f:
+            line = line.strip()
+
+            if not line:
+                continue
+
+            category, url = line.split("|", 1)
+
+            if category not in feeds:
+                feeds[category] = []
+
+            feeds[category].append(url)
+
+    return feeds
 
 def getNews():
     base_dir = Path(__file__).resolve().parent
@@ -14,7 +29,13 @@ def getNews():
     if not rss_list:
         return []
 
-    urls = random.sample(rss_list, k=min(4, len(rss_list)))
+    urls = []
+
+    for category in rss_list:
+        urls.append(random.choice(rss_list[category]))
+
+    random.shuffle(urls)
+    urls = urls[:4]
 
     feeds_entries = []
 
