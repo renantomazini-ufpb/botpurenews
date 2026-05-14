@@ -25,6 +25,5 @@ https://www.infomoney.com.br/feed/
 https://portal.fiocruz.br/rss.xml
 https://www.ufrgs.br/ufrgs/noticias/feed
 https://metropoleonline.com.br/rss/latest-posts
-https://ojoioeotrigo.com.br/feed/
 https://feeds.feedburner.com/asbeiras
 https://www.ogol.com.br/rss/noticias.php
