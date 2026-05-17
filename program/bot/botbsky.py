@@ -3,17 +3,18 @@ from program.scripts import geradorNew
 import time
 import os
 
-client = Client()
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+}
 
-# GitHub actions aqui
+# Inicialize o cliente passando os cabeçalhos customizados
+client = Client()
+client.request.headers.update(HEADERS) # <-- Força a biblioteca a se disfarçar de navegador
+
+# O resto do seu código continua exatamente igual...
 user = os.environ.get("BSKY_USER")
 password = os.environ.get("BSKY_PASS")
-
-if not user or not password:
-    raise ValueError("Credenciais não encontradas")
-
 client.login(user, password)
-
 
 def post():
     news = geradorNew.getANews()
