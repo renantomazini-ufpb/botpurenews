@@ -438,6 +438,8 @@ Síndrome
 tumor
 naufragam
 ecocídio
+decepadas
+matado
 
 # ======================
 # DROGAS
