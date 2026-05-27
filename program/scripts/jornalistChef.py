@@ -6,9 +6,6 @@ import unicodedata
 import hashlib
 
 
-
-
-
 #smells bad? Mas confia
 base_dir = Path(__file__).resolve().parent
 words_dir = base_dir.parent / "wordsData"
@@ -90,7 +87,10 @@ def maybeAddChar(title, chars):
 
     templates = [
         f"{title}, diz {char}",
+        f"{title}, opina {char}",
         f"{title}, afirma {char}",
+        f"{char} opina sobre: {title}",
+        f"{char} viaja enquanto: {title}",
         f"{char} comenta: {title}",
         f"{title}; entenda a visão de {char}",
         f"Para {char}, {title[0].lower()}{title[1:]}",
@@ -190,7 +190,7 @@ def getOneNews():
     if random.random() < 0.3: #eu deveria arrumar isso depois
         title = maybeAddPlace(title, wordLists["places"])
 
-    if random.random() < 0.40:
+    if random.random() < 0.35:
         title = maybeAddChar(title, wordLists["chars"])
 
 
@@ -204,12 +204,12 @@ def getOneNews():
     title = removeBadConnectors(title)
     title = polishHeadline(title)
 
-    if random.random() < 0.20:
-        title = addHumanFlavor(title)
-    elif random.random() < 0.20:
-        title = maybeApplyNewsStyle(title)
-    elif random.random() < 0.30:
-        title = maybeSoftTwist(title)
+    #if random.random() < 0.20:
+    #    title = addHumanFlavor(title)
+    #elif random.random() < 0.20:
+    #    title = maybeApplyNewsStyle(title)
+    #elif random.random() < 0.30:
+    #    title = maybeSoftTwist(title)
     title = ensureStrongEnding(title) 
     title = fixWeakEndingWithPlace(title, wordLists["places"])
     title = removeBrokenComparisons(title)
@@ -336,14 +336,14 @@ def fillBrokenConnectives(title, wordLists):
 
     if not pool:
         return title
-    pattern = r'\b(o|a|os|as|um|uma)\b\s*([,;:.!?])'
+    pattern = r'\b(o|a|os|as|um|uma|à)\b\s*([,;:.!?])'
 
     def repl(m):
         return f"{m.group(1)} {random.choice(pool)}{m.group(2)}"
 
     title = re.sub(pattern, repl, title, flags=re.IGNORECASE)
 
-    pattern_end = r'\b(o|a|os|as|um|uma)\s*$'
+    pattern_end = r'\b(o|a|os|as|um|uma|à)\s*$'
     title = re.sub(
         pattern_end,
         lambda m: f"{m.group(1)} {random.choice(pool)}",
@@ -549,7 +549,7 @@ def ensureStrongEnding(title):
         return title
 
     weak_words = [
-        "de", "do", "da", "dos", "das", "às","nesta","neste",
+        "de", "do", "da", "dos", "das", "às","nesta","neste","à",
         "para", "pra", "pro",
         "com", "sem",
         "em", "no", "na", "nos", "nas",
