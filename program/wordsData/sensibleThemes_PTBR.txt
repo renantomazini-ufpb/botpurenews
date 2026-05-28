@@ -440,6 +440,7 @@ naufragam
 ecocídio
 decepadas
 matado
+mata
 
 # ======================
 # DROGAS
