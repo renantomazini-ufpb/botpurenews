@@ -94,6 +94,11 @@ def maybeAddChar(title, chars):
         f"{title}; entenda a visão de {char}",
         f"Para {char}, {title[0].lower()}{title[1:]}",
         f"Exclusivo: {char} fala sobre {title[0].lower()}{title[1:]}",
+        f"entrevista com {char}: {title[0].lower()}{title[1:]}",
+        f"Confira a análise de {char} sobre {title[0].lower()}{title[1:]}",
+        f"Hoje, {char} comenta: {title[0].lower()}{title[1:]}",
+        f"{char} e {title[0].lower()}{title[1:]}: o que esperar?",
+        f"{title}; {char} comenta os detalhes",
     ]
 
     return random.choice(templates)
@@ -147,6 +152,14 @@ def fixConnectiveCollisions(text):
         (r'\bcom\s+com\b', 'com'),      # "com com" -> "com"
         (r'\bque\s+que\b', 'que'),      # "que que" -> "que"
         (r'\bcom\s+em\b', 'em'),        # "com em" -> "em"
+        (r'\bde\s+de\b', 'de'),        # "de de" -> "de"
+            (r'\bpara\s+para\b', 'para'),  # "para para" -> "para"
+            (r'\bcom\s+de\b', 'de'),       # "com de" -> "de"
+            (r'\bem\s+em\b', 'em'),        # "em em" -> "em"
+            (r'\bde\s+com\b', 'com'),      # "de com" -> "com"
+            (r'\bpara\s+com\b', 'com'),    # "para com" -> "com"
+                (r'\bcom\s+para\b', 'para'),  # "com para" -> "para"
+                
     ]
     
     for pattern, replacement in substitutions:
@@ -554,7 +567,9 @@ def ensureStrongEnding(title):
         "em", "no", "na", "nos", "nas",
         "por", "sobre",
         "e", "ou", "mas",
-        "o", "a", "os", "as", "um", "uma"
+        "o", "a", "os", "as", "um", "uma",
+        "de", "do", "da", "dos", "das", "à",
+        "que", "porque", "após", "enquanto"
     ]
 
     words = title.strip().split()
@@ -585,7 +600,23 @@ def ensureStrongEnding(title):
             "e repercute nas redes",
             "e gera reação",
             "mercado reage",
-            "mas a que custo?"
+            "mas a que custo?",
+            "e surpreende especialistas",
+            "e viraliza",
+            "e levanta debate",
+            "e chama atenção",
+            "confira as imagens",
+            "veja nas redes",
+            "clique para detalhes",
+            "veja o vídeo",
+            "veja mais no site",
+            "veja o que se sabe",
+            "primeiras reações",
+            "ultimas notícias",
+            "crise se aprofunda",
+            "alerta geral",
+            "alegria geral",
+            "comemoração geral",
         ]
 
         # só adiciona se já não parecer completo

@@ -486,6 +486,7 @@ cesárea
 depressão
 ansiedade
 psicose
+deficiência
 
 # DESASTRES NATURAIS
 terremoto
