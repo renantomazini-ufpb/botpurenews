@@ -470,6 +470,58 @@ internado
 grave
 
 # ======================
+# ABORTO / SAÚDE REPRODUTIVA
+aborto
+interrupção da gravidez
+gravidez indesejada
+gravidão
+grávida
+gestante
+feto
+fetal
+parto
+cesárea
+
+# SAÚDE MENTAL
+depressão
+ansiedade
+psicose
+
+# DESASTRES NATURAIS
+terremoto
+tsunami
+enchente
+inundação
+furacão
+ciclone
+tornado
+deslizamento
+avalanche
+sismo
+
+# MIGRAÇÃO / REFUGIADOS
+refugiado
+refugiada
+refugiados
+imigrante
+imigrantes
+migrante
+migrantes
+deslocado
+deslocamento forçado
+
+
+# DOENÇAS GRAVES
+HIV
+AIDS
+zika
+ebola
+febre amarela
+dengue
+malária
+tuberculose
+
+# ======================
 # propaganda
 # ======================
 diocast

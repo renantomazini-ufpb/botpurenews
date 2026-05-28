@@ -648,7 +648,7 @@ def smartTrim(text, max_words=10):
 
     trimmed = words[:max_words]
 
-    bad_endings = {"de", "do", "da", "para", "com", "em", "no", "na", "e"}
+    bad_endings = {"de", "do", "da", "para", "com", "em", "no", "na", "e", "entre", "após", "enquanto", "que", "por", "sobre"}
 
     while trimmed and trimmed[-1].lower() in bad_endings:
         trimmed.pop()
