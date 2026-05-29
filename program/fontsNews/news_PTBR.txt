@@ -17,7 +17,6 @@ esporte|https://feeds.folha.uol.com.br/esporte/rss091.xml
 esporte|https://www.ogol.com.br/rss/noticias.php
 politica|https://feeds.folha.uol.com.br/poder/rss091.xml
 politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
-jogos|https://rss.uol.com.br/feed/jogos.xml
 entretenimento|https://g1.globo.com/rss/g1/pop-arte/
 regional|https://metropoleonline.com.br/rss/latest-posts
 regional|https://feeds.feedburner.com/asbeiras
