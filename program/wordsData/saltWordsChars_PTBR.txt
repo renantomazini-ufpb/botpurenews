@@ -63,7 +63,7 @@ Ministro Frânces
 Estadunidense que mora em trailer
 Diretor da OMS
 Liminha
-Laerte
+Flávio Bolsonabo
 Devoradora do Serrado
 Desenvolvedor Python
 Senador chato
@@ -91,7 +91,7 @@ Stray Kids
 BTS
 Cebolinha
 Mônica
-Furry gostoso
+Furry
 Cain, irmão de Abel
 São Pedro
 São Paulo
@@ -124,6 +124,7 @@ Luís Fernando Verissimo
 # ALEATÓRIO / CAÓTICO
 # ======================
 um gato gigante
+amigo do tio do sobrinho do filho do Lula
 um alienígena
 um alienígena suspeito
 um robô descontrolado
@@ -358,6 +359,7 @@ Construtora Obina
 Construtora MRV
 Mico Leão Dourado
 Anta
+Tariflávio
 RH local
 RH de Tecnlogia
 RH de publicidade
