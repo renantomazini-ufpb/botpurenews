@@ -36,7 +36,7 @@ def maybeAcusation():
         "foi cancelado por",
         "responde por",
         "entra na mira por",
-        "vira alvo por",
+        "vira alvo do MP por",
         "foi acusado de",
         "foi denunciado por",
         "foi processado por",
