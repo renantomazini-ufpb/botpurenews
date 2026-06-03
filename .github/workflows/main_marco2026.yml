@@ -2,7 +2,7 @@ name: Bot Bluesky
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "30 12 * * *"
   workflow_dispatch:
 
 jobs:
@@ -22,7 +22,7 @@ jobs:
         run: pip install atproto feedparser
 
       - name: Run bot
-        run: python -m program.bot.botbsky
+        run: python -m program.bot.botbsky_acusacoes
         env:
           BSKY_USER: ${{ secrets.BSKY_USER }}
           BSKY_PASS: ${{ secrets.BSKY_PASS }}
