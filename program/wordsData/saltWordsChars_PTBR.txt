@@ -299,6 +299,7 @@ Pastor local
 Crente do rabo quente
 Ceo da Odebretch
 Odrebetch
+Teu pai
 Gato diplomado
 Gato diplomata da Turquia
 Diplomata Grego
@@ -329,6 +330,7 @@ Medium
 Traficante de batata
 Funcionario transformado em Barata
 Kafka
+Lanterninha do Cinemark
 Padeiro gourmet
 Gato de terno
 Cachorro de gravata

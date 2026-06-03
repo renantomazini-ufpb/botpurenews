@@ -222,8 +222,9 @@ def getOneNews():
     #    title = maybeApplyNewsStyle(title)
     #elif random.random() < 0.30:
     #    title = maybeSoftTwist(title)
+    title = fixWeakEndingComplements(title, wordLists)
     title = ensureStrongEnding(title) 
-    title = fixWeakEndingWithPlace(title, wordLists["places"])
+    title = fixWeakEndingComplements(title, wordLists)
     title = removeBrokenComparisons(title)
     title = finalize(title)
 
@@ -536,8 +537,8 @@ def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até prof
     part1 = split1[0].strip()
     part2 = split2[-1].strip()
 
-    part1 = smartTrim(part1)
-    part2 = smartTrim(part2)
+    part1 = maybeShortTrim(smartTrim(part1))
+    part2 = maybeShortTrim(smartTrim(part2))
     part2 = part2.lower()
 
     part1 = cleanEdgeWords(part1)
@@ -552,6 +553,22 @@ def mixHeadlinesV3(lines): #esse foi revisado, sim, chamei IA, chefe e até prof
     ])
 
     return f"{part1}{connector} {part2}"
+
+def maybeShortTrim(text, chance=0.50, max_words=3):
+    if random.random() > chance:
+        return text
+
+    words = text.split()
+
+    if len(words) <= max_words:
+        return text
+
+    short_text = cleanEdgeWords(" ".join(words[:max_words]))
+
+    if len(short_text.split()) < max_words:
+        return text
+
+    return short_text
 
 def removeBadConnectors(text):
     return re.sub(r'\b(enquanto|após)\b', '', text, flags=re.IGNORECASE)
@@ -669,6 +686,63 @@ def fixWeakEndingWithPlace(title, places):
 
 
     return " ".join(words)
+
+def fixWeakEndingComplements(title, wordLists):
+    if not title:
+        return title
+
+    words = title.strip().split()
+
+    if not words:
+        return title
+
+    last = words[-1].lower()
+    places = wordLists.get("places", [])
+    chars = wordLists.get("chars", [])
+
+    place = get_deterministic_place(title, places) if places else None
+    char = get_deterministic_char(title, chars) if chars else None
+
+    place_endings = {
+        "em": "em {}",
+        "no": "no {}",
+        "na": "na {}",
+        "nos": "nos {}",
+        "nas": "nas {}",
+        "para": "para {}",
+        "pra": "pra {}",
+        "pro": "pro {}",
+        "vai": "vai para {}",
+        "viaja": "viaja para {}",
+        "volta": "volta para {}",
+        "chega": "chega em {}",
+        "mora": "mora em {}",
+        "fica": "fica em {}",
+    }
+
+    char_endings = {
+        "com": "com {}",
+        "contra": "contra {}",
+        "segundo": "segundo {}",
+        "diz": "diz {}",
+        "afirma": "afirma {}",
+        "de": "de {}",
+        "do": "de {}",
+        "da": "de {}",
+        "por": "por {}",
+        "sobre": "sobre {}",
+        "sem": "sem {}",
+    }
+
+    if last in place_endings and place:
+        words[-1] = place_endings[last].format(place)
+        return " ".join(words)
+
+    if last in char_endings and char:
+        words[-1] = char_endings[last].format(char)
+        return " ".join(words)
+
+    return title
 
 #a versão anterior do bot tinha
 def smartTrim(text, max_words=10):

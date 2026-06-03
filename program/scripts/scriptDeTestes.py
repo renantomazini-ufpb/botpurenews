@@ -1,4 +1,5 @@
 from jornalistChefEstagiario import *
+from maybeAcusation import maybeAcusation
 
 
 
@@ -11,6 +12,11 @@ def getANews():
     print("pegando news")
     return getOneNews()
 
+def PrintMaybeAcusation(n):
+    print("printando acusacoes")
+    for x in range(n):
+        print(maybeAcusation())
+
 '''def PrintVideos(n):
     print("printando videos")
     for x in range(n):
@@ -18,4 +24,5 @@ def getANews():
 
 
 PrintNews(5)
+PrintMaybeAcusation(5)
 #PrintVideos(1)
