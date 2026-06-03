@@ -2,28 +2,27 @@ name: Bot Bluesky
 
 on:
   schedule:
-    - cron: "0 * * * *"  # roda a cada 1 hora
-  workflow_dispatch:     # permite rodar manualmente
+    - cron: "0 * * * *"
+  workflow_dispatch:
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar repositório
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configurar Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Instalar dependências
-        run: |
-          pip install atproto feedparser
+      - name: Install dependencies
+        run: pip install atproto feedparser
 
-      - name: Rodar bot
-        run: python -m program.bot.botbsky
+      - name: Run bot
+        run: python -m program.bot.botbsky_acusacoes
         env:
           BSKY_USER: ${{ secrets.BSKY_USER }}
           BSKY_PASS: ${{ secrets.BSKY_PASS }}
