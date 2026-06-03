@@ -37,6 +37,9 @@ def maybeAcusation():
         "responde por",
         "entra na mira por",
         "vira alvo por",
+        "foi acusado de",
+        "foi denunciado por",
+        "foi processado por",
     ]
 
-    return f"{char} {random.choice(connectives)} {infracao}"
+    return f"Atenção: {char} {random.choice(connectives)} {infracao}"
