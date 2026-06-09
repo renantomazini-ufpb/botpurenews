@@ -40,6 +40,8 @@ def maybeAcusation():
         "foi acusado de",
         "foi denunciado por",
         "foi processado por",
+        "precisa esclarecer o ato de",
+        "foi pego em flagrante por",
     ]
 
     return f"Atenção: {char} {random.choice(connectives)} {infracao}"
