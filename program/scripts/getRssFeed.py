@@ -1,5 +1,6 @@
 import feedparser
 import random
+import http.client
 from pathlib import Path
 
 def loadRSSList(path):
@@ -35,17 +36,33 @@ def getNews():
         urls.append(random.choice(rss_list[category]))
 
     random.shuffle(urls)
-    urls = urls[:4]
+    urls = urls[:3]
 
     feeds_entries = []
+    #print("Feeds selecionados:" )    
+    #print(urls)
 
     for url in urls:
-        feed = feedparser.parse(url)
+        try:
+            feed = feedparser.parse(url)
+        except http.client.IncompleteRead as e:
+            print(f"Aviso: leitura incompleta do feed {url}. Pulando este feed ({e}).")
+            continue
+        except Exception as e:
+            print(f"Aviso: falha ao carregar o feed {url}. Pulando este feed ({e}).")
+            continue
+
+        if not getattr(feed, "entries", None):
+            continue
+
+        if getattr(feed, "bozo", False) and getattr(feed, "bozo_exception", None):
+            print(f"Aviso: feed malformado {url}: {feed.bozo_exception}")
+
         entries = [e.title for e in feed.entries if hasattr(e, "title")]
         random.shuffle(entries)
         feeds_entries.append(entries[:8])  # até 8 por feed
 
-    # 🔥 mistura intercalando
+    # mistura intercalando
     mixed = []
     for i in range(8):
         for feed in feeds_entries:
@@ -108,7 +125,21 @@ def getVideo():
     #    print(url)
 
     for url in urls:
-        feed = feedparser.parse(url)
+        try:
+            feed = feedparser.parse(url)
+        except http.client.IncompleteRead as e:
+            print(f"Aviso: leitura incompleta do feed {url}. Pulando este feed ({e}).")
+            continue
+        except Exception as e:
+            print(f"Aviso: falha ao carregar o feed {url}. Pulando este feed ({e}).")
+            continue
+
+        if not getattr(feed, "entries", None):
+            continue
+
+        if getattr(feed, "bozo", False) and getattr(feed, "bozo_exception", None):
+            print(f"Aviso: feed malformado {url}: {feed.bozo_exception}")
+
         entries = [e.title for e in feed.entries if hasattr(e, "title")]
         
         sample = random.sample(entries, k=min(8, len(entries)))

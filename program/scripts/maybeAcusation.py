@@ -44,4 +44,13 @@ def maybeAcusation():
         "foi pego em flagrante por",
     ]
 
-    return f"Atenção: {char} {random.choice(connectives)} {infracao}"
+    calls = [
+        "Atençao",
+        "Urgente",
+        "Último minuto",
+        "Se liga",
+    ]
+    chamada =  random.choice(calls)
+
+
+    return f"{chamada} : {char} {random.choice(connectives)} {infracao}"
