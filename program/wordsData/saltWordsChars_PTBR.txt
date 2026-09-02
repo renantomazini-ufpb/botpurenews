@@ -71,6 +71,11 @@ Senadora
 Senadores
 Deputado chato
 Deputada chata
+Augusto Cury
+Caiado
+Ceo da Open Ai
+Obama
+La Pen
 # ======================
 # FILMES / SÉRIES
 # ======================
@@ -424,6 +429,7 @@ PDT
 PSOL
 PSDB
 PV
+PL
 Museu do Ipiranga
 UFMG
 Academia Brasileira de letras
@@ -432,3 +438,10 @@ SindiAutista
 Sindicato
 CUT
 Liga Pokemon
+Ministério da Defesa
+PCdoB
+Português
+Liminha
+Vorcaro
+Sr Linux
+Lampreia
