@@ -12,6 +12,7 @@ urls = [
     "https://g1.globo.com/dynamo/tecnologia/rss2.xml",
     "https://g1.globo.com/dynamo/carros/rss2.xml",
     "https://g1.globo.com/rss/g1/pop-arte/",
+    "https://ge.globo.com/Esportes/Rss/0,,AS0-9645,00.xml",
 
     # UOL
     "https://rss.uol.com.br/feed/cinema.xml",

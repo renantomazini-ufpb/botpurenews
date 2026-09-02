@@ -1,3 +1,13 @@
+politica|https://feeds.folha.uol.com.br/poder/rss091.xml
+politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
+entretenimento|https://g1.globo.com/rss/g1/pop-arte/
+regional|https://metropoleonline.com.br/rss/latest-posts
+regional|https://feeds.feedburner.com/asbeiras
+ciencia|https://portal.fiocruz.br/rss.xml
+ciencia|https://www.ufrgs.br/ufrgs/noticias/feed
+reddit|https://reddit.com/r/brasil.rss
+reddit|http://www.reddit.com/r/noticias.rss
+politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
 cinema|https://rss.uol.com.br/feed/cinema.xml
 geral|https://g1.globo.com/dynamo/rss2.xml
 economia|https://g1.globo.com/dynamo/economia/rss2.xml
@@ -15,13 +25,4 @@ carros|https://g1.globo.com/dynamo/carros/rss2.xml
 opiniao|https://feeds.folha.uol.com.br/opiniao/rss091.xml
 esporte|https://feeds.folha.uol.com.br/esporte/rss091.xml
 esporte|https://www.ogol.com.br/rss/noticias.php
-politica|https://feeds.folha.uol.com.br/poder/rss091.xml
-politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
-entretenimento|https://g1.globo.com/rss/g1/pop-arte/
 regional|https://metropoleonline.com.br/rss/latest-posts
-regional|https://feeds.feedburner.com/asbeiras
-ciencia|https://portal.fiocruz.br/rss.xml
-ciencia|https://www.ufrgs.br/ufrgs/noticias/feed
-reddit|https://reddit.com/r/brasil.rss
-reddit|http://www.reddit.com/r/noticias.rss
-politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias

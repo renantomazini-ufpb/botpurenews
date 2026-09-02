@@ -1,26 +1,36 @@
+
 import feedparser
 import random
 import http.client
+import urllib.request
 from pathlib import Path
 
 def loadRSSList(path):
     feeds = {}
-
     with open(path, 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
-
             if not line:
                 continue
-
             category, url = line.split("|", 1)
-
             if category not in feeds:
                 feeds[category] = []
-
             feeds[category].append(url)
-
     return feeds
+
+def fetch_feed_content(url):
+
+    req = urllib.request.Request(
+        url, 
+        headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+    )
+    with urllib.request.urlopen(req, timeout=10) as response:
+        content = response.read()
+
+        try:
+            return content.decode('utf-8')
+        except UnicodeDecodeError:
+            return content.decode('iso-8859-1', errors='replace')
 
 def getNews():
     base_dir = Path(__file__).resolve().parent
@@ -31,7 +41,6 @@ def getNews():
         return []
 
     urls = []
-
     for category in rss_list:
         urls.append(random.choice(rss_list[category]))
 
@@ -39,12 +48,12 @@ def getNews():
     urls = urls[:3]
 
     feeds_entries = []
-    #print("Feeds selecionados:" )    
-    #print(urls)
 
     for url in urls:
         try:
-            feed = feedparser.parse(url)
+
+            content = fetch_feed_content(url)
+            feed = feedparser.parse(content)
         except http.client.IncompleteRead as e:
             print(f"Aviso: leitura incompleta do feed {url}. Pulando este feed ({e}).")
             continue
@@ -55,21 +64,17 @@ def getNews():
         if not getattr(feed, "entries", None):
             continue
 
-        if getattr(feed, "bozo", False) and getattr(feed, "bozo_exception", None):
-            print(f"Aviso: feed malformado {url}: {feed.bozo_exception}")
 
         entries = [e.title for e in feed.entries if hasattr(e, "title")]
         random.shuffle(entries)
-        feeds_entries.append(entries[:8])  # até 8 por feed
+        feeds_entries.append(entries[:8])
 
-    # mistura intercalando
     mixed = []
     for i in range(8):
         for feed in feeds_entries:
             if i < len(feed):
                 mixed.append(feed[i])
 
-    # remove duplicados mantendo ordem
     seen = set()
     final = []
     for t in mixed:
@@ -78,7 +83,6 @@ def getNews():
             final.append(t)
 
     return final[:32]
-
 '''
 def getNews():
     titlesNews = []
