@@ -26,3 +26,11 @@ opiniao|https://feeds.folha.uol.com.br/opiniao/rss091.xml
 esporte|https://feeds.folha.uol.com.br/esporte/rss091.xml
 esporte|https://www.ogol.com.br/rss/noticias.php
 regional|https://metropoleonline.com.br/rss/latest-posts
+G1_Geral|https://g1.globo.com/rss/g1/
+tecnologia|https://g1.globo.com/rss/g1/tecnologia/
+economia|https://g1.globo.com/rss/g1/economia/
+geral|https://g1.globo.com/rss/g1/mundo/
+geral|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFkJ8uPxz6UvoI6ihgQJZnww
+tecnologia|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFGH4Wx-WL10iB4ZAdewkuDw
+brasil|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFSbUDnouVlBoCFAA7OUrcqg
+terra|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFWeXgaH6wwyTRAkA3n6sRxg

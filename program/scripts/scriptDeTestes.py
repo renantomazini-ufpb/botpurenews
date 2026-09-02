@@ -23,6 +23,6 @@ def PrintMaybeAcusation(n):
         print(retornaVideo())'''
 
 
-#PrintNews(5)
-PrintMaybeAcusation(5)
+PrintNews(5)
+#PrintMaybeAcusation(5)
 #PrintVideos(1)

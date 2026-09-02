@@ -1,4 +1,4 @@
-import hashlib
+#import hashlib
 import random
 import re
 import unicodedata
@@ -42,26 +42,7 @@ def split_smart_clause(headline):
     return " ".join(words[:mid]), " ".join(words[mid:])
 
 
-def get_dada_headline(news_list):
-    if len(news_list) < 2:
-        return "Sem notícias suficientes"
 
-
-    line1, line2 = random.sample(news_list, 2)
-
-    part1, _ = split_smart_clause(line1)
-    _, part2 = split_smart_clause(line2)
-
-
-    connector = random.choice([",", ";", " e", " ou", " -", ":", ""])
-    
-
-    part2_clean = part2[0].lower() + part2[1:] if part2 else ""
-    headline = f"{part1}{connector} {part2_clean}".strip()
-    
-
-    headline = re.sub(r'\b(de|para|com|em|e|ou)\s*$', '', headline, flags=re.IGNORECASE)
-    return headline.strip()
 
 
 def getOneNews():
@@ -74,3 +55,42 @@ def getOneNews():
 
 if __name__ == "__main__":
     print(getOneNews())
+
+
+
+
+def clean_edge_words(text):
+
+    bad_endings = r'\b(de|da|do|dos|das|em|no|na|nos|nas|com|para|por|que|mas|e|ou|porém|entretanto|todavia)\s*$'
+
+    bad_starters = r'^\s*(que|e|ou|mas|porém|entretanto|todavia|onde|como)'
+
+    text = re.sub(bad_endings, '', text, flags=re.IGNORECASE).strip()
+    text = re.sub(bad_starters, '', text, flags=re.IGNORECASE).strip()
+    return text
+
+def get_dada_headline(news_list):
+    if len(news_list) < 2:
+        return "Sem notícias suficientes"
+
+    line1, line2 = random.sample(news_list, 2)
+
+    part1, _ = split_smart_clause(line1)
+    _, part2 = split_smart_clause(line2)
+
+
+    part1 = clean_edge_words(part1)
+    part2 = clean_edge_words(part2)
+
+    if not part1 or not part2:
+        return "Sem notícias suficientes"
+
+    connector = random.choice([",", ";", " e"])
+    part2_clean = part2[0].lower() + part2[1:]
+
+    headline = f"{part1}{connector} {part2_clean}".strip()
+    
+    headline = re.sub(r'\s+,', ',', headline)
+    headline = re.sub(r'\s+', ' ', headline)
+
+    return headline
