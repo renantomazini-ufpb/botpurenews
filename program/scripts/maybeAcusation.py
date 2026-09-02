@@ -29,8 +29,10 @@ def maybeAcusation():
     infracao = random.choice(words["infracoes"])
 
     connectives = [
+        "finalmente fala de polêmica por",
         "foi multado por",
         "recebe multa por",
+        "foi cancelado por",
         "leva multa por",
         "vai responder por",
         "foi cancelado por",
@@ -38,10 +40,17 @@ def maybeAcusation():
         "entra na mira por",
         "vira alvo do MP por",
         "foi acusado de",
+        "foi cancelado por",
         "foi denunciado por",
         "foi processado por",
+        "foi cancelado por",
         "precisa esclarecer o ato de",
         "foi pego em flagrante por",
+        "se esconde depois de",
+        "se esconde depois de ser acusado de",
+        "se explica depois de",
+        "foi chamado depois de",
+        "chama atenção depois de",
     ]
 
     calls = [
@@ -49,6 +58,7 @@ def maybeAcusation():
         "Urgente",
         "Último minuto",
         "Se liga",
+        "​💣​",
     ]
     chamada =  random.choice(calls)
 
