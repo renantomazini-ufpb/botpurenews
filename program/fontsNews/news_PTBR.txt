@@ -7,6 +7,7 @@ ciencia|https://portal.fiocruz.br/rss.xml
 ciencia|https://www.ufrgs.br/ufrgs/noticias/feed
 reddit|https://reddit.com/r/brasil.rss
 reddit|http://www.reddit.com/r/noticias.rss
+reddit|https://www.reddit.com/r/noticias_en_espanol.rss
 politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
 cinema|https://rss.uol.com.br/feed/cinema.xml
 geral|https://g1.globo.com/dynamo/rss2.xml
