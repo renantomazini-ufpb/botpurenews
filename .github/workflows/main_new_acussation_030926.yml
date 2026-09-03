@@ -19,7 +19,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install atproto feedparser
+        run: pip install atproto feedparser requests
 
       - name: Run bot
         run: python -m program.bot.botbsky_acusacoes
