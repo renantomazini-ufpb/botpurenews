@@ -22,7 +22,7 @@ jobs:
           python-version: "3.11"
 
       - name: Instalar dependências
-        run: pip install atproto feedparser
+        run: pip install atproto feedparser requests
 
       - name: Rodar bot
         run: python -m program.bot.botbsky
