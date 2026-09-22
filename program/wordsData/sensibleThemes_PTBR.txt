@@ -372,6 +372,10 @@ mortos
 desaparecide
 esfaqueia
 esfaqueou
+atacado
+atacada
+INSCREVER
+desaparece
 # ======================
 # RACISMO / DISCRIMINAÇÃO
 # ======================

@@ -1,14 +1,12 @@
 politica|https://feeds.folha.uol.com.br/poder/rss091.xml
 politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
 entretenimento|https://g1.globo.com/rss/g1/pop-arte/
-regional|https://metropoleonline.com.br/rss/latest-posts
-regional|https://feeds.feedburner.com/asbeiras
+geral|https://metropoleonline.com.br/rss/latest-posts
+portugual|https://feeds.feedburner.com/asbeiras
 ciencia|https://portal.fiocruz.br/rss.xml
-ciencia|https://www.ufrgs.br/ufrgs/noticias/feed
 reddit|https://reddit.com/r/brasil.rss
 reddit|http://www.reddit.com/r/noticias.rss
 reddit|https://www.reddit.com/r/noticias_en_espanol.rss
-politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
 cinema|https://rss.uol.com.br/feed/cinema.xml
 geral|https://g1.globo.com/dynamo/rss2.xml
 economia|https://g1.globo.com/dynamo/economia/rss2.xml
@@ -19,7 +17,6 @@ mundo|https://feeds.folha.uol.com.br/mundo/rss091.xml
 tecnologia|https://g1.globo.com/dynamo/tecnologia/rss2.xml
 tecnologia|https://rss.uol.com.br/feed/tecnologia.xml
 tecnologia|https://feeds.folha.uol.com.br/tec/rss091.xml
-tecnologia|https://rss.tecmundo.com.br/feed
 tecnologia|https://manualdousuario.net/feed/
 tecnologia|https://canaltech.com.br/rss/
 carros|https://g1.globo.com/dynamo/carros/rss2.xml
@@ -27,7 +24,7 @@ opiniao|https://feeds.folha.uol.com.br/opiniao/rss091.xml
 esporte|https://feeds.folha.uol.com.br/esporte/rss091.xml
 esporte|https://www.ogol.com.br/rss/noticias.php
 regional|https://metropoleonline.com.br/rss/latest-posts
-G1_Geral|https://g1.globo.com/rss/g1/
+geral|https://g1.globo.com/rss/g1/
 tecnologia|https://g1.globo.com/rss/g1/tecnologia/
 economia|https://g1.globo.com/rss/g1/economia/
 geral|https://g1.globo.com/rss/g1/mundo/
@@ -35,3 +32,12 @@ geral|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFkJ8uPxz6UvoI6ihgQ
 tecnologia|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFGH4Wx-WL10iB4ZAdewkuDw
 brasil|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFSbUDnouVlBoCFAA7OUrcqg
 terra|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFWeXgaH6wwyTRAkA3n6sRxg
+esporte|https://www.espn.com.br/espn/rss/news
+bbc|https://feeds.bbci.co.uk/portuguese/rss.xml
+literatura|https://www.revistabula.com/feed/
+regional|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFRC3upGcj_decdPi7JXT7Bg
+tecnologia|https://www.youtube.com/feeds/videos.xml?playlist_id=UUSHGH4Wx-WL10iB4ZAdewkuDw
+games|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFQPaSBaTONuIcSzb-CE3dyQ
+politica|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFXWilBOsa-Dm9BJYAJ3TzoQ
+ciencia|https://www.youtube.com/feeds/videos.xml?playlist_id=UULFSTlOTcyUmzvhQi6F8lFi5w
+politica|https://www.youtube.com/feeds/videos.xml?channel_id=UCTnRtQ9IkBGmCKcLB31BcyA

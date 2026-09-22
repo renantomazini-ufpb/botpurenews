@@ -16,11 +16,9 @@ def loadRSSList(path):
         for line_num, line in enumerate(f, 1):
             line = line.strip()
             
-            # Ignores linhas vazias ou comentários
             if not line or line.startswith('#'):
                 continue
             
-            # Valida se a linha realmente contém o separador '|'
             if '|' not in line:
                 print(f"Aviso: Linha {line_num} ignorada por falta do separador '|': '{line}'")
                 continue
@@ -69,7 +67,6 @@ def extract_titles(url):
     titles = []
     for e in feed.entries:
         if hasattr(e, "title") and e.title:
-            # html.unescape converte &quot; para " e &#39; para '
             clean_title = html.unescape(e.title.strip())
             titles.append(clean_title)
             
@@ -121,7 +118,7 @@ def getVideo():
 
     # Pega até 4 feeds aleatórios
     all_urls = [url for urls in rss_list.values() for url in urls]
-    urls = random.sample(all_urls, k=min(4, len(all_urls)))
+    urls = random.sample(all_urls, k=min(3, len(all_urls)))
 
     titlesNews = []
 

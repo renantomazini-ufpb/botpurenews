@@ -38,7 +38,7 @@ def clean_edge_words(text):
 
 
     bad_endings = (
-        r"\b(de|da|do|dos|das|em|no|na|nos|nas|com|para|por|que|mas|e|ou|porém|"
+        r"\b(de|da|do|dos|das|em|no|na|nos|nas|com|para|por|que|mas|e|ou|porém|enquanto|"
         r"entretanto|todavia|o|a|os|as|um|uma|uns|umas)\s*$"
     )
     bad_starters = r"^\s*(que|e|ou|mas|porém|entretanto|todavia|onde|como)"
@@ -106,6 +106,8 @@ def get_dada_headline(news_list):
 
         p1 = clean_edge_words(p1)
         p2 = clean_edge_words(p2)
+        p1 = p1.lower().capitalize()
+        p2 = p2.lower().capitalize()
 
         if len(p1.split()) >= 3 and len(p2.split()) >= 3:
             part1, part2 = p1, p2
@@ -135,7 +137,7 @@ def get_dada_headline(news_list):
     if starts_with_prep:
         connector = ","
     else:
-        connector = random.choice([",", " -", " enquanto", " e"])
+        connector = random.choice([",", " -", " enquanto", " e", " mas", " porém", " entretanto", " todavia", " onde", " como", " segundo", " durante", " para", " com", " por", " em", " no", " na", " sobre"])
 
     headline = f"{part1}{connector} {part2_clean}".strip()
     headline = re.sub(r"\s+,", ",", headline)
