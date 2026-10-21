@@ -2,7 +2,7 @@ name: Bot Daily Previsao 030926
 
 on:
   schedule:
-    - cron: "30 11 * * *"  # 09:43 UTC = 06:43 Brasil
+    - cron: "30 10 * * *"  # 09:43 UTC = 06:43 Brasil
   workflow_dispatch:  # permite rodar manualmente também
 
 jobs:
