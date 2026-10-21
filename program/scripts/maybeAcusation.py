@@ -30,27 +30,33 @@ def maybeAcusation():
 
     connectives = [
         "finalmente fala de polêmica por",
-        "foi multado por",
+        "foi multado(a) por",
         "recebe multa por",
-        "foi cancelado por",
+        "foi cancelado(a) por",
         "leva multa por",
         "vai responder por",
-        "foi cancelado por",
+        "foi cancelado(a) por",
         "responde por",
         "entra na mira por",
         "vira alvo do MP por",
-        "foi acusado de",
-        "foi cancelado por",
-        "foi denunciado por",
-        "foi processado por",
-        "foi cancelado por",
+        "foi acusado(a) de",
+        "foi cancelado(a) por",
+        "foi denunciado(a) por",
+        "foi processado(a) por",
+        "foi cancelado(a) por",
         "precisa esclarecer o ato de",
         "foi pego em flagrante por",
         "se esconde depois de",
-        "se esconde depois de ser acusado de",
+        "se esconde depois de ser acusado(a) de",
         "se explica depois de",
-        "foi chamado depois de",
-        "chama atenção depois de",
+        "foi chamado(a) depois de",
+        "foi bloqueado(a) do zap da firma por",
+        "foi expulso(a) da piscina do condomínio por",
+        "postou vídeo chorando depois de",
+        "postou vídeo depois de",
+        "postou foto chorando depois de",
+        "pintou a unha de branco depois de",
+        "foi atacado(a) por um guaxinim depois de",
     ]
 
     calls = [
@@ -59,6 +65,8 @@ def maybeAcusation():
         "Último minuto",
         "Se liga",
         "​💣​",
+        "​💣 explodam​",
+        "​!!!​",
     ]
     chamada =  random.choice(calls)
 
