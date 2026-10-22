@@ -1,7 +1,6 @@
 politica|https://feeds.folha.uol.com.br/poder/rss091.xml
 politica|https://www.camara.leg.br/noticias/rss/ultimas-noticias
 entretenimento|https://g1.globo.com/rss/g1/pop-arte/
-geral|https://metropoleonline.com.br/rss/latest-posts
 portugual|https://feeds.feedburner.com/asbeiras
 ciencia|https://portal.fiocruz.br/rss.xml
 reddit|https://reddit.com/r/brasil.rss
